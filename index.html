@@ -46,6 +46,40 @@
       --radius: 12px;
     }
 
+    /* ─── ACTIVE NAV ──────────────────────────────────── */
+    .nav-links a.active { color: var(--navy) !important; font-weight: 600; }
+
+    /* ─── SCROLL INDICATOR ────────────────────────────── */
+    #scroll-indicator {
+      position: fixed;
+      top: 0; left: 0;
+      height: 4px;
+      width: 0%;
+      background: var(--accent);
+      z-index: 999;
+      transition: width 0.1s linear;
+      border-radius: 0 2px 2px 0;
+    }
+
+    /* ─── PRINT STYLESHEET ────────────────────────────── */
+    @media print {
+      nav, .fab, .popup-overlay, .mobile-menu, #scroll-indicator, .theme-toggle { display: none !important; }
+      #hero { min-height: auto; padding: 2rem 0 1rem; background: none !important; }
+      #hero::before, #hero::after { display: none; }
+      .hero-name { color: #0d2545 !important; font-size: 2rem; }
+      .hero-tagline, .hero-eyebrow { color: #1a1a1a !important; }
+      .hero-cta, [style*="Open to opportunities"] { display: none !important; }
+      .hero-inner { flex-direction: row; gap: 2rem; padding: 0; }
+      .hero-photo-wrap { width: 100px; height: 100px; border: 2px solid #0d2545; }
+      section { padding: 1.5rem 0; break-inside: avoid; }
+      .exp-item, .timeline-body, .project-card, .skill-group { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; }
+      body { font-size: 11pt; color: #000; background: #fff; }
+      .section-title { color: #0d2545 !important; font-size: 1.3rem; }
+      .container { max-width: 100%; padding: 0; }
+      a { color: inherit; text-decoration: none; }
+      footer { background: none; color: #555; padding: 1rem 0; }
+    }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     html { scroll-behavior: smooth; }
@@ -786,6 +820,9 @@
 </head>
 <body>
 
+  <!-- SCROLL INDICATOR -->
+  <div id="scroll-indicator"></div>
+
   <!-- NAV -->
   <nav>
     <a href="#hero" class="nav-logo">Felix Stan</a>
@@ -1165,7 +1202,7 @@
         <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
         LinkedIn
       </a>
-      <a href="https://github.com/" target="_blank">
+      <a href="https://github.com/felixioan" target="_blank">
         <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
         GitHub
       </a>
@@ -1231,19 +1268,46 @@
   </div>
 
   <script>
-    // Nav contact link
+    // ── Scroll progress indicator ──────────────────────
+    const indicator = document.getElementById('scroll-indicator');
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      indicator.style.width = (scrollTop / docHeight * 100) + '%';
+    });
+
+    // ── Active nav highlighting ────────────────────────
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+
+    const navObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + entry.target.id) {
+              link.classList.add('active');
+            }
+          });
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+
+    sections.forEach(s => navObserver.observe(s));
+
+    // ── Nav contact link ───────────────────────────────
     document.getElementById('navContact').addEventListener('click', (e) => {
       e.preventDefault();
       overlay.classList.add('open');
     });
 
-    // Hamburger menu
+    // ── Hamburger menu ─────────────────────────────────
     const hamburger = document.getElementById('hamburger');
     const mobileMenu = document.getElementById('mobileMenu');
     hamburger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
     function closeMobile() { mobileMenu.classList.remove('open'); }
 
-    // Contact popup
+    // ── Contact popup ──────────────────────────────────
     const fab = document.getElementById('fabBtn');
     const overlay = document.getElementById('popupOverlay');
     const closeBtn = document.getElementById('popupClose');
@@ -1252,8 +1316,8 @@
     overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('open'); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') overlay.classList.remove('open'); });
 
-    // Subtle scroll fade-in
-    const observer = new IntersectionObserver((entries) => {
+    // ── Scroll fade-in ─────────────────────────────────
+    const fadeObserver = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         if (e.isIntersecting) {
           e.target.style.opacity = '1';
@@ -1266,7 +1330,7 @@
       el.style.opacity = '0';
       el.style.transform = 'translateY(20px)';
       el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-      observer.observe(el);
+      fadeObserver.observe(el);
     });
   </script>
 </body>
