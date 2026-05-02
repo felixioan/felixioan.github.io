@@ -501,8 +501,16 @@
 
     .projects-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 1.5rem;
+    }
+
+    @media (max-width: 900px) {
+      .projects-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 600px) {
+      .projects-grid { grid-template-columns: 1fr; }
     }
 
     .project-card {
@@ -891,15 +899,15 @@
           </div>
           <div class="stat-card">
             <div class="stat-number">12/12</div>
-            <div class="stat-label">Master's thesis grade — Top Academic Honor</div>
+            <div class="stat-label">Master's thesis grade — Top Academic Honor<br><span style="font-size:0.78rem;color:var(--text-muted);margin-top:0.3rem;display:block;">Completed the education 8 months ahead of schedule through an accelerated path</span></div>
           </div>
           <div class="stat-card">
-            <div class="stat-number">~500</div>
-            <div class="stat-label">Users supported across 4 Maersk sites</div>
+            <div class="stat-number">8</div>
+            <div class="stat-label">Projects delivered across academia and industry</div>
           </div>
           <div class="stat-card">
-            <div class="stat-number">3</div>
-            <div class="stat-label">Countries worked in — Denmark, Belgium, Romania</div>
+            <div class="stat-number" style="font-size:1.5rem;">🇩🇰 🇧🇪 🇷🇴</div>
+            <div class="stat-label">Denmark · Belgium · Romania</div>
           </div>
         </div>
       </div>
@@ -1233,8 +1241,8 @@
         <div class="skill-group">
           <div class="skill-group-title">Languages</div>
           <div class="skill-tags">
-            <span class="skill-tag">English — C1</span>
             <span class="skill-tag">Romanian — Native</span>
+            <span class="skill-tag">English — Fluent</span>
             <span class="skill-tag">French — Intermediate</span>
             <span class="skill-tag">Danish — Beginner</span>
           </div>
