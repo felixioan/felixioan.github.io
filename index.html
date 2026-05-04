@@ -399,9 +399,9 @@
     }
 
     .section-title {
-      font-family: 'Playfair Display', serif;
+      font-family: 'Montserrat', sans-serif;
       font-size: clamp(1.8rem, 3vw, 2.6rem);
-      font-weight: 700;
+      font-weight: 600;
       color: var(--navy);
       margin-bottom: 3rem;
       line-height: 1.2;
@@ -430,23 +430,31 @@
     }
 
     .stat-card {
-      background: var(--bg);
-      border: 1px solid var(--border);
+      background: var(--navy);
+      border: none;
+      border-top: 3px solid var(--accent);
       border-radius: var(--radius);
       padding: 1.5rem;
+      transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s ease !important;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px) !important;
+      box-shadow: 0 8px 24px rgba(13,37,69,0.25) !important;
     }
 
     .stat-number {
-      font-family: 'Playfair Display', serif;
+      font-family: 'Montserrat', sans-serif;
       font-size: 2rem;
       font-weight: 700;
-      color: var(--navy);
+      color: var(--accent);
     }
 
     .stat-label {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-top: 0.25rem;
+      font-size: 0.78rem;
+      color: var(--bg);
+      margin-top: 0.5rem;
+      line-height: 1.5;
     }
 
     /* ─── EDUCATION ───────────────────────────────────── */
@@ -487,8 +495,9 @@
     }
 
     .timeline-degree {
-      font-family: 'Playfair Display', serif;
+      font-family: 'Montserrat', sans-serif;
       font-size: 1.2rem;
+      font-weight: 600;
       color: var(--navy);
       margin-bottom: 0.75rem;
     }
@@ -548,8 +557,9 @@
     }
 
     .exp-role {
-      font-family: 'Playfair Display', serif;
+      font-family: 'Montserrat', sans-serif;
       font-size: 1.15rem;
+      font-weight: 600;
       color: var(--navy);
       margin-bottom: 0.35rem;
     }
@@ -625,8 +635,9 @@
     }
 
     .project-title {
-      font-family: 'Playfair Display', serif;
+      font-family: 'Montserrat', sans-serif;
       font-size: 1.1rem;
+      font-weight: 600;
       color: var(--navy);
       margin-bottom: 0.75rem;
       line-height: 1.3;
@@ -676,22 +687,38 @@
     }
 
     .skill-group {
-      background: var(--bg);
-      border: 1px solid var(--border);
+      background: var(--navy);
+      border: none;
       border-radius: var(--radius);
       padding: 1.5rem;
+      transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s ease !important;
+    }
+
+    .skill-group:hover {
+      transform: translateY(-3px) !important;
+      box-shadow: 0 6px 20px rgba(13,37,69,0.25) !important;
     }
 
     .skill-group-title {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 700;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--navy);
-      margin-bottom: 1rem;
-      padding-bottom: 0.6rem;
-      border-bottom: 2px solid var(--accent);
-      display: inline-block;
+      color: var(--accent);
+      margin-bottom: 6px;
+      padding-bottom: 0;
+      border-bottom: none;
+      display: block;
+    }
+
+    .skill-group-title::after {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 2px;
+      background: var(--accent);
+      margin-top: 6px;
+      margin-bottom: 14px;
     }
 
     .skill-tags {
@@ -701,12 +728,13 @@
     }
 
     .skill-tag {
-      font-size: 0.78rem;
-      padding: 0.3rem 0.7rem;
-      border-radius: 6px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
+      font-size: 0.72rem;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(200,169,110,0.15);
+      border: 1px solid rgba(200,169,110,0.3);
+      color: rgba(255,255,255,0.85);
+      font-weight: 500;
     }
 
     /* ─── FOOTER ──────────────────────────────────────── */
@@ -970,8 +998,8 @@
   <!-- ABOUT -->
   <section id="about">
     <div class="container">
-      <p class="section-label">Who I Am</p>
-      <h2 class="section-title">About Me</h2>
+      <p class="section-label" style="display:none;">Who I Am</p>
+      <h2 class="section-title" style="font-family:'Montserrat',sans-serif;color:var(--accent);font-weight:700;">Who I Am</h2>
       <div class="about-grid">
         <div class="about-text">
           <p>I'm an engineer who thinks in business outcomes, and a business thinker who can implement technically. That combination is what my career has been building toward, and what my Master's formalised.</p>
@@ -985,7 +1013,7 @@
           </div>
           <div class="stat-card">
             <div class="stat-number">12/12</div>
-            <div class="stat-label">Master's thesis grade — Top Academic Honor<br><span style="font-size:0.78rem;color:var(--text-muted);margin-top:0.3rem;display:block;">Completed the education 8 months ahead of schedule through an accelerated path.</span></div>
+            <div class="stat-label">Master's thesis grade — Top Academic Honor<br><span style="font-size:0.75rem;color:#f4ede0;margin-top:0.3rem;display:block;">Completed the education 8 months ahead of schedule through an accelerated path</span></div>
           </div>
           <div class="stat-card">
             <div class="stat-number">8</div>
@@ -1003,8 +1031,8 @@
   <!-- EDUCATION -->
   <section id="education">
     <div class="container">
-      <p class="section-label">Academic Background</p>
-      <h2 class="section-title">Education</h2>
+      <p class="section-label" style="display:none;">Academic Background</p>
+      <h2 class="section-title" style="font-family:'Montserrat',sans-serif;color:var(--accent);font-weight:700;">Academic Background</h2>
       <div class="timeline">
 
         <div class="timeline-item">
@@ -1012,18 +1040,21 @@
           <div class="timeline-body">
             <div class="timeline-institution">Aarhus University · Herning, Denmark</div>
             <div class="timeline-degree">MSc in Engineering (Technology Based Business Development)</div>
-            <p>Completed a 120 ECTS engineering master's in approximately 16 months, a programme designed for 24. Graduated ahead of schedule with the highest possible thesis grade, while conducting real-world projects inside the LEGO Group, Maersk, and Port Esbjerg. The degree sits at the intersection of engineering and business: rigorous in methods, applied in context, covering data governance, business model innovation, AI evaluation, Six Sigma, and machine learning.</p>
-            <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin:0.75rem 0;">
-              <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:0.5rem 0.9rem;text-align:center;">
-                <div style="font-size:0.65rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:2px;">GPA · Danish</div>
-                <div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--navy);">9.7 <span style="font-size:0.75rem;color:var(--text-muted);font-family:'Montserrat',sans-serif;">/ 12</span></div>
+            <p style="text-align:center;">Completed a 120 ECTS engineering master's in approximately 16 months, a programme designed for 24. Graduated ahead of schedule with the highest possible thesis grade, while conducting real-world projects inside the LEGO Group, Maersk, and Port Esbjerg. The degree sits at the intersection of engineering and business: rigorous in methods, applied in context, covering data governance, business model innovation, AI evaluation, Six Sigma, and machine learning.</p>
+            <div style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;margin:1rem 0;justify-content:center;">
+              <div style="display:flex;align-items:baseline;gap:6px;">
+                <span style="font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);">Danish GPA</span>
+                <span style="font-size:1.8rem;font-weight:700;color:var(--navy);line-height:1;">9.7</span>
+                <span style="font-size:0.85rem;color:var(--text-muted);font-weight:400;">/ 12</span>
               </div>
-              <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:0.5rem 0.9rem;text-align:center;">
-                <div style="font-size:0.65rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:2px;">GPA · USA</div>
-                <div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--navy);">3.7 <span style="font-size:0.75rem;color:var(--text-muted);font-family:'Montserrat',sans-serif;">/ 4.0</span></div>
+              <div style="width:1px;height:36px;background:var(--border);"></div>
+              <div style="display:flex;align-items:baseline;gap:6px;">
+                <span style="font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);">USA GPA</span>
+                <span style="font-size:1.8rem;font-weight:700;color:var(--navy);line-height:1;">3.7</span>
+                <span style="font-size:0.85rem;color:var(--text-muted);font-weight:400;">/ 4.0</span>
               </div>
             </div>
-            <span class="badge">Thesis Grade: 12 / A — Top Academic Honor</span>
+            <div style="text-align:center;"><span class="badge">Thesis Grade: 12 / A — Top Academic Honor</span></div>
           </div>
         </div>
 
@@ -1043,8 +1074,8 @@
   <!-- EXPERIENCE -->
   <section id="experience">
     <div class="container">
-      <p class="section-label">Professional Background</p>
-      <h2 class="section-title">Experience</h2>
+      <p class="section-label" style="display:none;">Professional Background</p>
+      <h2 class="section-title" style="font-family:'Montserrat',sans-serif;color:var(--accent);font-weight:700;">Professional Experience</h2>
 
       <div class="exp-item">
         <div class="exp-header">
@@ -1119,8 +1150,8 @@
   <!-- PROJECTS -->
   <section id="projects">
     <div class="container">
-      <p class="section-label">Selected Work</p>
-      <h2 class="section-title">Projects</h2>
+      <p class="section-label" style="display:none;">Selected Work</p>
+      <h2 class="section-title" style="font-family:'Montserrat',sans-serif;color:var(--accent);font-weight:700;">Selected Work</h2>
       <!-- LEGO connected pair -->
       <div style="grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1.5px solid var(--navy-light); border-radius: var(--radius); overflow: hidden;">
 
@@ -1278,8 +1309,8 @@
   </section>
   <section id="skills">
     <div class="container">
-      <p class="section-label">What I Bring</p>
-      <h2 class="section-title">Core Competencies</h2>
+      <p class="section-label" style="display:none;">What I Bring</p>
+      <h2 class="section-title" style="font-family:'Montserrat',sans-serif;color:var(--accent);font-weight:700;">What I Bring</h2>
       <div class="skills-grid">
 
         <div class="skill-group">
