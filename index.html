@@ -279,11 +279,9 @@
       content: '';
       position: absolute;
       inset: 0;
-      background-image:
-        radial-gradient(circle, rgba(200,169,110,0.12) 0%, transparent 70%),
-        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-      background-position: top right, center;
-      background-size: 700px 700px, 60px 60px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 300px 300px;
       pointer-events: none;
       z-index: 0;
     }
@@ -1180,7 +1178,7 @@
         <div class="exp-header">
           <div>
             <div class="exp-company">Maersk</div>
-            <div class="exp-role">IT Student Assistant (IT Operations &amp; Service Management)</div>
+            <div class="exp-role">IT Student Assistant (IT Operations & Service Management)</div>
             <div class="exp-location">Aarhus, Denmark</div>
           </div>
           <div class="exp-period">Nov 2023 — Jan 2026</div>
