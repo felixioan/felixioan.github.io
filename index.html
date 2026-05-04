@@ -98,23 +98,13 @@
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 100;
-      background: rgba(244, 237, 224, 0.92);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
+      background: #111827;
+      border-bottom: none;
       padding: 0 2rem;
       height: 60px;
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      justify-content: space-between;
-    }
-
-    .nav-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--navy);
-      text-decoration: none;
-      letter-spacing: 0.02em;
     }
 
     .nav-links {
@@ -125,15 +115,35 @@
 
     .nav-links a {
       text-decoration: none;
-      color: var(--text-muted);
-      font-size: 0.875rem;
-      font-weight: 500;
-      letter-spacing: 0.04em;
+      color: rgba(255,255,255,0.75);
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       transition: color 0.2s;
     }
 
-    .nav-links a:hover { color: var(--navy); }
+    .nav-links a:hover { color: #fff; }
+    .nav-links a.active { color: #fff !important; font-weight: 600; }
+
+    .nav-contact-btn {
+      background: var(--accent);
+      color: var(--navy);
+      border: none;
+      border-radius: 30px;
+      padding: 0.45rem 1.25rem;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+      white-space: nowrap;
+      justify-self: end;
+    }
+
+    .nav-contact-btn:hover { opacity: 0.88; transform: scale(1.03); }
 
     .hamburger {
       display: none;
@@ -143,13 +153,14 @@
       background: none;
       border: none;
       padding: 4px;
+      justify-self: end;
     }
 
     .hamburger span {
       display: block;
       width: 22px;
       height: 2px;
-      background: var(--navy);
+      background: #fff;
       transition: all 0.3s;
     }
 
@@ -157,8 +168,8 @@
       display: none;
       position: fixed;
       top: 60px; left: 0; right: 0;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
+      background: #111827;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
       z-index: 99;
       padding: 1.5rem 2rem;
       flex-direction: column;
@@ -169,10 +180,10 @@
 
     .mobile-menu a {
       text-decoration: none;
-      color: var(--text);
+      color: rgba(255,255,255,0.75);
       font-size: 1rem;
-      font-weight: 500;
-      letter-spacing: 0.04em;
+      font-weight: 400;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
     }
 
@@ -231,7 +242,7 @@
     }
 
     .hero-name {
-      font-family: 'Playfair Display', serif;
+      font-family: 'Montserrat', sans-serif;
       font-size: clamp(2.8rem, 5vw, 4.2rem);
       font-weight: 700;
       color: #fff;
@@ -791,7 +802,11 @@
 
     /* ─── RESPONSIVE ──────────────────────────────────── */
     @media (max-width: 768px) {
+      nav {
+        justify-content: space-between;
+      }
       .nav-links { display: none; }
+      .nav-contact-btn { display: none; }
       .hamburger { display: flex; }
 
       .hero-inner {
@@ -833,15 +848,15 @@
 
   <!-- NAV -->
   <nav>
-    <a href="#hero" class="nav-logo">Felix Stan</a>
+    <div></div>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#education">Education</a></li>
       <li><a href="#experience">Experience</a></li>
       <li><a href="#projects">Projects</a></li>
       <li><a href="#skills">Skills</a></li>
-      <li><a href="#" id="navContact" style="color:var(--accent);font-weight:600;">Contact Me</a></li>
     </ul>
+    <button class="nav-contact-btn" id="navContact">Contact Me</button>
     <button class="hamburger" id="hamburger" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
@@ -866,7 +881,7 @@
           <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
           Horsens, Denmark · Open to relocation
         </p>
-        <p class="hero-tagline">I design solutions that fit the problem, not just the technology. Engineer by training, business thinker by choice, problem solver by habit.</p>
+        <p class="hero-tagline" style="font-style:italic;">I design solutions that fit the problem, not just the technology. Engineer by training, business thinker by choice, problem solver by habit.</p>
         <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:2.5rem;">
           <a href="#projects" class="hero-cta">View My Work ↓</a>
           <span style="display:flex;align-items:center;gap:0.5rem;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:30px;padding:0.45rem 1rem;">
