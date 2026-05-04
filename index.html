@@ -61,6 +61,101 @@
       border-radius: 0 2px 2px 0;
     }
 
+    /* ─── NAV PILL SHIMMER ────────────────────────────── */
+    @keyframes shimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+
+    .nav-contact-btn {
+      background: linear-gradient(
+        105deg,
+        var(--accent) 40%,
+        #f0d9a8 50%,
+        var(--accent) 60%
+      );
+      background-size: 200% auto;
+      animation: shimmer 3s linear infinite;
+      color: var(--navy);
+      border: none;
+      border-radius: 30px;
+      padding: 0.45rem 1.25rem;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+      white-space: nowrap;
+      justify-self: end;
+    }
+
+    .nav-contact-btn:hover {
+      opacity: 0.92;
+      transform: scale(1.05);
+    }
+
+    /* ─── FAB PULSE RING ──────────────────────────────── */
+    @keyframes fabPulse {
+      0% { box-shadow: 0 0 0 0 rgba(200,169,110,0.6), 0 4px 20px rgba(200,169,110,0.4); }
+      70% { box-shadow: 0 0 0 14px rgba(200,169,110,0), 0 4px 20px rgba(200,169,110,0.4); }
+      100% { box-shadow: 0 0 0 0 rgba(200,169,110,0), 0 4px 20px rgba(200,169,110,0.4); }
+    }
+
+    .fab {
+      animation: fabPulse 2.2s ease-out infinite;
+    }
+
+    .fab:hover {
+      animation: none;
+      transform: scale(1.1);
+      box-shadow: 0 6px 28px rgba(200,169,110,0.6);
+    }
+
+    /* ─── HOVER EFFECTS ───────────────────────────────── */
+    .project-card {
+      transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s ease, border-color 0.3s ease !important;
+    }
+    .project-card:hover {
+      transform: translateY(-6px) scale(1.01) !important;
+      box-shadow: 0 12px 40px rgba(13,37,69,0.12) !important;
+      border-color: var(--accent) !important;
+    }
+
+    .exp-item {
+      transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s ease, border-left-color 0.3s ease !important;
+    }
+    .exp-item:hover {
+      transform: translateX(4px) !important;
+      box-shadow: 0 6px 24px rgba(13,37,69,0.08) !important;
+      border-left-color: var(--accent) !important;
+    }
+
+    .timeline-body {
+      transition: border-left-color 0.3s ease, box-shadow 0.3s ease !important;
+    }
+    .timeline-body:hover {
+      border-left-color: var(--accent) !important;
+      box-shadow: 0 4px 20px rgba(13,37,69,0.07) !important;
+    }
+
+    .skill-group {
+      transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s ease !important;
+    }
+    .skill-group:hover {
+      transform: translateY(-3px) !important;
+      box-shadow: 0 6px 20px rgba(13,37,69,0.08) !important;
+    }
+
+    .stat-card {
+      transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s ease !important;
+    }
+    .stat-card:hover {
+      transform: translateY(-4px) !important;
+      box-shadow: 0 8px 24px rgba(13,37,69,0.1) !important;
+    }
+
     /* ─── PRINT STYLESHEET ────────────────────────────── */
     @media print {
       nav, .fab, .popup-overlay, .mobile-menu, #scroll-indicator, .theme-toggle { display: none !important; }
@@ -125,25 +220,6 @@
 
     .nav-links a:hover { color: #fff; }
     .nav-links a.active { color: #fff !important; font-weight: 600; }
-
-    .nav-contact-btn {
-      background: var(--accent);
-      color: var(--navy);
-      border: none;
-      border-radius: 30px;
-      padding: 0.45rem 1.25rem;
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: opacity 0.2s, transform 0.2s;
-      white-space: nowrap;
-      justify-self: end;
-    }
-
-    .nav-contact-btn:hover { opacity: 0.88; transform: scale(1.03); }
 
     .hamburger {
       display: none;
@@ -674,17 +750,12 @@
       color: var(--navy);
       border: none;
       cursor: pointer;
-      box-shadow: 0 4px 20px rgba(200,169,110,0.4);
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: transform 0.25s, box-shadow 0.25s;
       font-size: 1.3rem;
-    }
-
-    .fab:hover {
-      transform: scale(1.08);
-      box-shadow: 0 6px 28px rgba(200,169,110,0.55);
+      animation: fabPulse 2.2s ease-out infinite;
+      transition: transform 0.25s;
     }
 
     /* ─── CONTACT POPUP ───────────────────────────────── */
@@ -1398,22 +1469,74 @@
     overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('open'); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') overlay.classList.remove('open'); });
 
-    // ── Scroll fade-in ─────────────────────────────────
-    const fadeObserver = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.style.opacity = '1';
-          e.target.style.transform = 'translateY(0)';
+    // ── Scroll animations — A + C ──────────────────────
+
+    // Section-level scale + fade (Option A)
+    const sectionEls = document.querySelectorAll('.timeline-item, .exp-item, .stat-card, .skill-group');
+    sectionEls.forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'scale(0.96) translateY(24px)';
+      el.style.transition = 'opacity 0.55s cubic-bezier(0.22,1,0.36,1), transform 0.55s cubic-bezier(0.22,1,0.36,1)';
+    });
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'scale(1) translateY(0)';
+          sectionObserver.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.08 });
+    }, { threshold: 0.1 });
 
-    document.querySelectorAll('.exp-item, .project-card, .skill-group, .timeline-item, .stat-card').forEach(el => {
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(20px)';
-      el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-      fadeObserver.observe(el);
+    sectionEls.forEach(el => sectionObserver.observe(el));
+
+    // Staggered card reveal (Option C)
+    document.querySelectorAll('.projects-grid').forEach(grid => {
+      const cards = grid.querySelectorAll('.project-card');
+      cards.forEach((card, i) => {
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.94) translateY(30px)';
+        card.style.transition = `opacity 0.55s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s, transform 0.55s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s`;
+      });
+
+      const gridObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            cards.forEach(card => {
+              card.style.opacity = '1';
+              card.style.transform = 'scale(1) translateY(0)';
+            });
+            gridObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.05 });
+
+      gridObserver.observe(grid);
     });
+
+    // LEGO pair staggered
+    const legoPair = document.querySelectorAll('[style*="grid-column: 1 / -1"] .project-card, [style*="grid-column:1/-1"] .project-card');
+    legoPair.forEach((card, i) => {
+      card.style.opacity = '0';
+      card.style.transform = 'scale(0.94) translateY(30px)';
+      card.style.transition = `opacity 0.6s cubic-bezier(0.22,1,0.36,1) ${i * 0.15}s, transform 0.6s cubic-bezier(0.22,1,0.36,1) ${i * 0.15}s`;
+    });
+
+    const legoObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          legoPair.forEach(card => {
+            card.style.opacity = '1';
+            card.style.transform = 'scale(1) translateY(0)';
+          });
+          legoObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.05 });
+
+    if (legoPair.length) legoObserver.observe(legoPair[0].closest('[style*="grid-column"]') || legoPair[0]);
+
   </script>
 </body>
 </html>
