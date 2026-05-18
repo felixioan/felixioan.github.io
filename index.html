@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -47,7 +47,8 @@
     }
 
     /* ─── ACTIVE NAV ──────────────────────────────────── */
-    .nav-links a.active { color: var(--navy) !important; font-weight: 600; }
+    .nav-links a.active { color: #fff !important; font-weight: 400; }
+    .nav-links a.active::after { width: 100%; }
 
     /* ─── SCROLL INDICATOR ────────────────────────────── */
     #scroll-indicator {
@@ -148,14 +149,6 @@
       box-shadow: 0 6px 20px rgba(13,37,69,0.08) !important;
     }
 
-    .stat-card {
-      transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s ease !important;
-    }
-    .stat-card:hover {
-      transform: translateY(-4px) !important;
-      box-shadow: 0 8px 24px rgba(13,37,69,0.1) !important;
-    }
-
     /* ─── PRINT STYLESHEET ────────────────────────────── */
     @media print {
       nav, .fab, .popup-overlay, .mobile-menu, #scroll-indicator, .theme-toggle { display: none !important; }
@@ -193,13 +186,21 @@
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 100;
-      background: #111827;
-      border-bottom: none;
+      background: transparent;
+      border-bottom: 1px solid transparent;
       padding: 0 2rem;
       height: 60px;
       display: grid;
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
+      transition: background 0.5s ease, backdrop-filter 0.5s ease, -webkit-backdrop-filter 0.5s ease, border-color 0.5s ease;
+    }
+
+    nav.scrolled {
+      background: rgba(10, 18, 38, 0.82);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      border-color: rgba(255,255,255,0.07);
     }
 
     .nav-links {
@@ -216,10 +217,22 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
       transition: color 0.2s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width 0.35s cubic-bezier(0.22,1,0.36,1);
     }
 
     .nav-links a:hover { color: #fff; }
-    .nav-links a.active { color: #fff !important; font-weight: 600; }
+    .nav-links a.active { color: #fff !important; font-weight: 400; }
 
     .hamburger {
       display: none;
@@ -269,7 +282,9 @@
       padding-top: 60px;
       display: flex;
       align-items: center;
-      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, #1e4080 100%);
+      background: linear-gradient(135deg, #09192f 0%, var(--navy) 25%, var(--navy-mid) 60%, #1e4080 80%, #0f2952 100%);
+      background-size: 200% 200%;
+      animation: heroBreathe 10s ease-in-out infinite;
       position: relative;
       overflow: hidden;
     }
@@ -297,19 +312,80 @@
       z-index: 0;
     }
 
+    /* ─── HERO CANVAS ─────────────────────────────────── */
+    #heroCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
     /* ─── PHOTO GLOW ──────────────────────────────────── */
     .hero-photo-wrap {
-      flex-shrink: 0;
       width: 280px;
       height: 280px;
       border-radius: 50%;
-      border: 4px solid rgba(200,169,110,0.6);
       overflow: hidden;
       background: var(--navy-mid);
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 0 8px rgba(200,169,110,0.1), 0 0 40px rgba(200,169,110,0.2), 0 20px 60px rgba(0,0,0,0.4);
+      box-shadow: 0 0 40px rgba(200,169,110,0.2), 0 20px 60px rgba(0,0,0,0.4);
+      position: relative;
+      z-index: 1;
+      animation: liquidPhoto 9s ease-in-out infinite;
+    }
+
+    /* ─── PHOTO PARALLAX WRAPPER ─────────────────────── */
+    .hero-photo-parallax {
+      flex-shrink: 0;
+      position: relative;
+      width: 280px;
+      height: 280px;
+      animation: heroScaleIn 1s cubic-bezier(0.22,1,0.36,1) 0.2s both;
+      will-change: transform;
+    }
+
+    .hero-photo-parallax::before {
+      content: '';
+      position: absolute;
+      inset: -16px;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 0deg,
+        rgba(200,169,110,0.95) 0deg,
+        rgba(200,169,110,0.4)  60deg,
+        rgba(200,169,110,0.05) 160deg,
+        transparent            220deg,
+        rgba(200,169,110,0.05) 300deg,
+        rgba(200,169,110,0.95) 360deg
+      );
+      mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #fff 0);
+      -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #fff 0);
+      animation: ringRotate 4s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes liquidPhoto {
+      0%   { border-radius: 50%; }
+      20%  { border-radius: 46% 54% 53% 47% / 50% 47% 53% 50%; }
+      40%  { border-radius: 54% 46% 47% 53% / 47% 53% 47% 53%; }
+      60%  { border-radius: 47% 53% 56% 44% / 53% 47% 51% 49%; }
+      80%  { border-radius: 53% 47% 44% 56% / 47% 53% 47% 53%; }
+      100% { border-radius: 50%; }
+    }
+
+
+    /* ─── STATUS BADGE ─────────────────────────────────── */
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-radius: 30px;
+      padding: 0.62rem 1.3rem;
+      border: 1.5px solid rgba(200,169,110,0.3);
     }
 
     /* ─── SECTION DIVIDERS ────────────────────────────── */
@@ -411,7 +487,7 @@
       align-items: center;
       gap: 4rem;
       position: relative;
-      z-index: 1;
+      z-index: 2;
     }
 
     .hero-text { flex: 1; }
@@ -424,15 +500,21 @@
       text-transform: uppercase;
       color: var(--accent);
       margin-bottom: 1.25rem;
+      animation: heroSlideUp 0.65s cubic-bezier(0.22,1,0.36,1) 0.15s both;
     }
 
     .hero-name {
       font-family: 'Montserrat', sans-serif;
       font-size: clamp(2.8rem, 5vw, 4.2rem);
       font-weight: 700;
-      color: #fff;
       line-height: 1.1;
       margin-bottom: 1rem;
+      color: transparent;
+      background: linear-gradient(105deg, #ffffff 30%, var(--accent) 50%, #ffffff 70%);
+      background-size: 250% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      animation: nameWipe 0.9s cubic-bezier(0.22,1,0.36,1) 0.3s both, nameShimmer 5s linear 1.3s infinite;
     }
 
     .hero-tagline {
@@ -442,22 +524,27 @@
       max-width: 480px;
       margin-bottom: 2.5rem;
       line-height: 1.65;
+      animation: heroSlideUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.9s both;
     }
 
     .hero-cta {
       display: inline-block;
-      padding: 0.5rem 1.4rem;
+      padding: 0.72rem 2rem;
       background: var(--accent);
       color: var(--navy);
       font-weight: 700;
-      font-size: 0.78rem;
+      font-size: 0.84rem;
       letter-spacing: 0.04em;
       text-decoration: none;
       border-radius: 30px;
-      transition: opacity 0.2s, transform 0.2s;
+      transition: opacity 0.2s, transform 0.2s, box-shadow 0.3s;
     }
 
-    .hero-cta:hover { opacity: 0.88; transform: translateY(-2px); }
+    .hero-cta:hover {
+      opacity: 0.92;
+      transform: translateY(-2px);
+      box-shadow: 0 0 28px rgba(200,169,110,0.55), 0 8px 24px rgba(200,169,110,0.25);
+    }
 
     .hero-photo-wrap img {
       width: 100%;
@@ -501,6 +588,24 @@
       color: var(--navy);
       margin-bottom: 3rem;
       line-height: 1.2;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -10px;
+      width: 44px;
+      height: 1.5px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.55s cubic-bezier(0.22,1,0.36,1) 0.3s;
+    }
+
+    .section-title.revealed::after {
+      transform: scaleX(1);
     }
 
     /* ─── ABOUT ───────────────────────────────────────── */
@@ -508,49 +613,107 @@
 
     .about-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
+      grid-template-columns: 7fr 3fr;
+      gap: 0 4rem;
       align-items: start;
     }
 
     .about-text p {
       color: var(--text-muted);
-      margin-bottom: 1rem;
+      margin-bottom: 1.2rem;
       line-height: 1.8;
+    }
+
+    .about-text p:first-child {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 1.12rem;
+      font-style: italic;
+      color: var(--navy);
+      line-height: 1.85;
+      margin-bottom: 1.5rem;
+    }
+
+    .highlight {
+      color: var(--accent);
+      font-weight: 700;
+      position: relative;
+    }
+
+    .highlight::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -1px;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width 0.25s cubic-bezier(0.22,1,0.36,1);
+    }
+
+    .highlight:hover::after {
+      width: 100%;
     }
 
     .about-stats {
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
+      gap: 2rem;
+      padding-left: 1.5rem;
+      position: relative;
     }
 
     .stat-card {
-      background: var(--navy);
+      background: none;
       border: none;
-      border-top: 3px solid var(--accent);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s ease !important;
+      padding: 0;
     }
 
-    .stat-card:hover {
-      transform: translateY(-4px) !important;
-      box-shadow: 0 8px 24px rgba(13,37,69,0.25) !important;
+    .stat-card::after {
+      content: none;
     }
 
     .stat-number {
       font-family: 'Montserrat', sans-serif;
-      font-size: 2rem;
+      font-size: clamp(3rem, 4.5vw, 4.5rem);
       font-weight: 700;
       color: var(--accent);
+      line-height: 1;
+      display: inline-block;
+      transition: transform 0.25s ease, text-shadow 0.25s ease;
+    }
+
+    .stat-card:hover .stat-number {
+      transform: scale(1.05);
+      text-shadow: 0 0 22px rgba(200,169,110,0.45);
+    }
+
+    @keyframes numPop {
+      0%   { transform: scale(1); }
+      45%  { transform: scale(1.14); }
+      100% { transform: scale(1); }
+    }
+
+    .num-pop { animation: numPop 0.45s cubic-bezier(0.22,1,0.36,1); }
+
+    .stat-featured .stat-number {
+      text-shadow: 0 0 28px rgba(200,169,110,0.35);
+    }
+
+    .stat-note {
+      font-size: 0.65rem;
+      color: var(--navy-mid);
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-top: 0.3rem;
     }
 
     .stat-label {
-      font-size: 0.78rem;
-      color: var(--bg);
-      margin-top: 0.5rem;
+      font-size: 0.73rem;
+      color: var(--text-muted);
       line-height: 1.5;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
     /* ─── EDUCATION ───────────────────────────────────── */
@@ -614,6 +777,260 @@
       border-radius: 20px;
       margin-top: 0.75rem;
       letter-spacing: 0.03em;
+    }
+
+    /* ─── EDUCATION TIMELINE V2 ──────────────────────── */
+    .timeline-v2 { display: flex; flex-direction: column; }
+
+    .tl-entry {
+      display: grid;
+      grid-template-columns: 30px 1fr;
+      gap: 0 2rem;
+    }
+
+    .tl-aside {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 0.35rem;
+    }
+
+    .tl-dot {
+      width: 13px; height: 13px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(200,169,110,0.15);
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tl-featured .tl-dot {
+      width: 17px; height: 17px;
+      box-shadow: 0 0 0 5px rgba(200,169,110,0.2), 0 0 18px rgba(200,169,110,0.35);
+      animation: dotPulse 2.2s ease-out infinite;
+    }
+
+    @keyframes dotPulse {
+      0%   { box-shadow: 0 0 0 0   rgba(200,169,110,0.55), 0 0 18px rgba(200,169,110,0.35); }
+      70%  { box-shadow: 0 0 0 14px rgba(200,169,110,0),   0 0 18px rgba(200,169,110,0.35); }
+      100% { box-shadow: 0 0 0 0   rgba(200,169,110,0),    0 0 18px rgba(200,169,110,0.35); }
+    }
+
+    .tl-line-seg {
+      flex: 1;
+      width: 1.5px;
+      background: linear-gradient(to bottom, rgba(200,169,110,0.6), rgba(200,169,110,0.12));
+      margin: 10px 0 0;
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform 1s cubic-bezier(0.22,1,0.36,1) 0.5s;
+      position: relative;
+      overflow: visible;
+    }
+
+    .tl-line-seg.revealed { transform: scaleY(1); }
+
+    .tl-line-seg::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px rgba(200,169,110,0.7);
+      animation: beadTravel 2.8s ease-in-out infinite;
+      animation-play-state: paused;
+    }
+
+    .tl-line-seg.revealed::after {
+      animation-play-state: running;
+      animation-delay: 1s;
+    }
+
+    @keyframes beadTravel {
+      0%   { top: 0%;   opacity: 0; }
+      8%   { opacity: 1; }
+      92%  { opacity: 1; }
+      100% { top: 100%; opacity: 0; }
+    }
+
+    .tl-body { padding-bottom: 3rem; }
+
+    .tl-when {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--navy);
+      margin-bottom: 0.85rem;
+    }
+
+    .tl-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .tl-card:hover { box-shadow: 0 8px 32px rgba(13,37,69,0.08); }
+
+    .tl-dark {
+      background: var(--navy);
+      border: none;
+    }
+
+    .tl-dark:hover { box-shadow: 0 12px 40px rgba(13,37,69,0.3); }
+
+    .tl-institution {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.2rem;
+    }
+
+    .tl-rank {
+      font-size: 0.64rem;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.06em;
+      margin-bottom: 0.9rem;
+    }
+
+    .tl-degree {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 0.2rem;
+    }
+
+    .tl-degree-light { color: var(--navy); }
+
+    .tl-subtitle {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.42);
+      margin-bottom: 1.1rem;
+    }
+
+    .tl-desc {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.75;
+      margin-bottom: 0;
+    }
+
+    .tl-desc-light { color: var(--text-muted); }
+
+    .tl-thesis {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.25rem;
+      background: rgba(200,169,110,0.1);
+      border: 1px solid rgba(200,169,110,0.22);
+      border-radius: 8px;
+      padding: 1rem 1.4rem;
+      margin: 1.4rem 0 1.2rem;
+      text-align: center;
+    }
+
+    .tl-thesis-grade {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .tl-thesis-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 0.02em;
+    }
+
+    .tl-thesis-sub {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.42);
+      margin-top: 0.25rem;
+    }
+
+    .tl-gpa-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      background: rgba(255,255,255,0.04);
+      border-radius: 8px;
+      padding: 1rem 1.4rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.4rem;
+    }
+
+    .tl-gpa-label {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.15rem;
+    }
+
+    .tl-gpa-inline {
+      display: flex;
+      align-items: baseline;
+      gap: 5px;
+    }
+
+    .gpa-num {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1;
+      display: inline-block;
+      transition: transform 0.25s ease;
+    }
+
+    .tl-gpa-max {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.32);
+    }
+
+    .tl-gpa-sep {
+      width: 1px;
+      height: 44px;
+      background: rgba(255,255,255,0.08);
+      flex-shrink: 0;
+    }
+
+    .tl-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .tl-tag {
+      font-size: 0.7rem;
+      font-weight: 500;
+      padding: 0.22rem 0.65rem;
+      border-radius: 20px;
+      letter-spacing: 0.03em;
+      background: rgba(200,169,110,0.12);
+      border: 1px solid rgba(200,169,110,0.22);
+      color: rgba(255,255,255,0.72);
+    }
+
+    .tl-tag-light {
+      background: #f0e8d8;
+      border-color: transparent;
+      color: var(--navy-light);
     }
 
     /* ─── EXPERIENCE ──────────────────────────────────── */
@@ -688,6 +1105,246 @@
       left: 0;
       color: var(--accent);
       font-size: 1rem;
+    }
+
+    /* ─── EXPERIENCE V2 ──────────────────────────────── */
+    .exp-entries {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .exp-entry {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 0 4rem;
+      padding: 2.5rem;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--surface);
+      box-shadow: 0 2px 10px rgba(13,37,69,0.04);
+      transition: border-color 0.45s ease, box-shadow 0.45s ease;
+    }
+
+    .exp-entry:last-child { border-bottom: 1px solid var(--border); }
+
+    .exp-entry.is-active {
+      border-color: rgba(200,169,110,0.38);
+      box-shadow: 0 8px 40px rgba(13,37,69,0.09);
+    }
+
+    .exp-entry.is-active .exp-co-name {
+      color: var(--accent);
+    }
+
+    .exp-sticky {
+      position: sticky;
+      top: 82px;
+      align-self: start;
+    }
+
+    .exp-co-name {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.1;
+      margin-bottom: 0.2rem;
+    }
+
+    .exp-entry-featured .exp-co-name { color: var(--navy); }
+
+    /* Progress rail */
+    #experience { position: relative; }
+
+    .exp-progress-rail {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: rgba(200,169,110,0.1);
+    }
+
+    .exp-progress-fill {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 0%;
+      background: linear-gradient(to bottom, var(--accent), rgba(200,169,110,0.5));
+      transition: height 0.06s linear;
+    }
+
+    .exp-progress-dot {
+      position: absolute;
+      left: 50%;
+      top: 0%;
+      transform: translate(-50%, -50%);
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(200,169,110,0.6);
+      transition: top 0.06s linear;
+    }
+
+    /* Context editorial medals */
+    .exp-ctx {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0 1.5rem;
+      margin-bottom: 1.6rem;
+      padding-bottom: 1.6rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .exp-ctx-item {
+      border-top: 2px solid rgba(200,169,110,0.45);
+      padding-top: 0.6rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--navy);
+      line-height: 1.45;
+      letter-spacing: 0.01em;
+      transition: border-top-color 0.35s ease, color 0.35s ease;
+    }
+
+    .exp-entry.is-active .exp-ctx-item {
+      border-top-color: var(--accent);
+      color: var(--navy);
+    }
+
+    /* Bullet hover */
+    .exp-bullets li {
+      transition: color 0.2s ease;
+    }
+
+    .exp-bullets li:hover { color: var(--navy); }
+
+    .exp-bullets li::before {
+      transition: transform 0.2s ease;
+    }
+
+    .exp-bullets li:hover::before { transform: scale(1.4) translateY(-5%); }
+
+    .exp-co-context {
+      font-size: 0.67rem;
+      color: var(--text-muted);
+      letter-spacing: 0.03em;
+      margin-bottom: 1.4rem;
+      line-height: 1.55;
+    }
+
+    .exp-role-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--navy);
+      line-height: 1.35;
+      margin-bottom: 0.15rem;
+    }
+
+    .exp-role-period {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--navy);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin-top: 0.7rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .exp-role-location {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 1.75rem;
+    }
+
+    .exp-metric-num {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    .exp-metric-label {
+      font-size: 0.67rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .exp-promo { margin-bottom: 1rem; }
+
+    .exp-promo-badge {
+      display: inline-block;
+      background: rgba(200,169,110,0.12);
+      border: 1px solid rgba(200,169,110,0.3);
+      color: var(--accent);
+      font-size: 0.64rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.18rem 0.55rem;
+      border-radius: 20px;
+      margin-bottom: 0.55rem;
+    }
+
+    .exp-promo-flow {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+      margin-bottom: 0.75rem;
+    }
+
+    .exp-promo-arrow { color: var(--accent); font-weight: 700; }
+
+    .exp-content { padding-top: 0.1rem; }
+
+    .exp-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .exp-bullets li {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.72;
+      padding-left: 1.15rem;
+      position: relative;
+    }
+
+    .exp-bullets li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 1rem;
+      top: 0.05em;
+    }
+
+    .exp-tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .exp-tag-pill {
+      font-size: 0.7rem;
+      font-weight: 500;
+      padding: 0.22rem 0.65rem;
+      border-radius: 20px;
+      background: #f0e8d8;
+      color: var(--navy-light);
+      letter-spacing: 0.03em;
     }
 
     /* ─── PROJECTS ────────────────────────────────────── */
@@ -996,6 +1653,43 @@
       50% { box-shadow: 0 0 0 6px rgba(74,222,128,0.1); }
     }
 
+    @keyframes heroSlideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes heroScaleIn {
+      from { opacity: 0; transform: scale(0.86); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .hero-meta {
+      animation: heroSlideUp 0.65s cubic-bezier(0.22,1,0.36,1) 0.75s both;
+    }
+
+    .hero-cta-row {
+      animation: heroSlideUp 0.65s cubic-bezier(0.22,1,0.36,1) 1.1s both;
+    }
+
+    @keyframes nameWipe {
+      from { clip-path: inset(0 100% 0 0); }
+      to   { clip-path: inset(0 0% 0 0); }
+    }
+
+    @keyframes nameShimmer {
+      from { background-position: 200% center; }
+      to   { background-position: -200% center; }
+    }
+
+    @keyframes ringRotate {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes heroBreathe {
+      0%, 100% { background-position: 0% 0%; }
+      50%       { background-position: 100% 100%; }
+    }
+
     /* ─── RESPONSIVE ──────────────────────────────────── */
     @media (max-width: 768px) {
       nav {
@@ -1014,9 +1708,18 @@
 
       .hero-tagline { margin: 0 auto 2rem; }
 
+      .hero-photo-parallax { width: 180px; height: 180px; }
       .hero-photo-wrap { width: 180px; height: 180px; }
 
-      .about-grid { grid-template-columns: 1fr; }
+      .about-grid { grid-template-columns: 1fr; gap: 3rem 0; }
+      .about-stats { padding-left: 0; }
+      .about-stats::before { display: none; }
+      .tl-entry { grid-template-columns: 22px 1fr; gap: 0 1.2rem; }
+      .tl-card { padding: 1.5rem; }
+      .tl-gpa-row { gap: 1rem; padding: 0.85rem 1rem; }
+      .exp-entry { grid-template-columns: 1fr; gap: 1.5rem 0; padding: 1.75rem; border-radius: 12px; }
+      .exp-sticky { position: static; }
+      .exp-ctx { grid-template-columns: 1fr 1fr; }
 
       .timeline-item {
         grid-template-columns: 1fr;
@@ -1069,25 +1772,28 @@
 
   <!-- HERO -->
   <section id="hero">
+    <canvas id="heroCanvas"></canvas>
     <div class="hero-inner">
       <div class="hero-text">
         <span class="hero-eyebrow">Technology · Business · Engineering</span>
         <h1 class="hero-name">Felix Stan</h1>
-        <p style="font-size:0.82rem;color:rgba(255,255,255,0.75);margin-bottom:0.75rem;display:flex;align-items:center;gap:0.4rem;">
+        <p class="hero-meta" style="font-size:0.82rem;color:rgba(255,255,255,0.75);margin-bottom:0.75rem;display:flex;align-items:center;gap:0.4rem;">
           <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
           Horsens, Denmark · Open to relocation
         </p>
         <p class="hero-tagline" style="font-style:italic;">I design solutions that fit the problem, not just the technology. Engineer by training, business thinker by choice, problem solver by habit.</p>
-        <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:2.5rem;">
-          <a href="#projects" class="hero-cta">View My Work ↓</a>
-          <span style="display:flex;align-items:center;gap:0.5rem;border:1.5px solid rgba(255,255,255,0.3);border-radius:30px;padding:0.45rem 1rem;">
+        <div class="hero-cta-row" style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:2.5rem;">
+          <a href="#projects" class="hero-cta">View My Work</a>
+          <span class="status-badge">
             <span style="width:9px;height:9px;border-radius:50%;background:#4ade80;box-shadow:0 0 0 3px rgba(74,222,128,0.25);flex-shrink:0;animation:pulse 2s infinite;"></span>
             <span style="font-size:0.78rem;font-weight:500;color:rgba(255,255,255,0.9);letter-spacing:0.02em;">Open to opportunities</span>
           </span>
         </div>
       </div>
-      <div class="hero-photo-wrap">
-        <img src="photo.png" alt="Felix Stan" />
+      <div class="hero-photo-parallax">
+        <div class="hero-photo-wrap">
+          <img src="photo.png" alt="Felix Stan" />
+        </div>
       </div>
     </div>
   </section>
@@ -1100,25 +1806,28 @@
       <div class="about-grid">
         <div class="about-text">
           <p>I'm an engineer who thinks in business outcomes, and a business thinker who can implement technically. That combination is what my career has been building toward, and what my Master's formalised.</p>
-          <p>Over the past eight years I've worked across IT operations, service management, and academic research at organisations like Maersk, NATO, and the LEGO Group. I've run multi-site IT infrastructure, automated incident management at scale, and designed data governance frameworks from scratch. What connects all of it is a consistent approach: understand the full picture before proposing a solution, then build something that actually fits.</p>
+          <p>Over the past eight years I've worked across IT operations, service management, and academic research at organisations like <span class="highlight">Maersk</span>, <span class="highlight">NATO</span>, <span class="highlight">Capgemini</span>, and <span class="highlight">the LEGO Group</span>. I've run multi-site IT infrastructure, automated incident management at scale, and designed data governance frameworks from scratch. What connects all of it is a consistent approach: understand the full picture before proposing a solution, then build something that actually fits.</p>
           <p>I finished a two-year Master's in sixteen months. Not because I was in a hurry, but because I set a high bar and held it. I'm now looking for a role where I can apply that same discipline to real organisational challenges, whether that's in IT service management, digital transformation, process improvement, or project delivery.</p>
         </div>
         <div class="about-stats">
           <div class="stat-card">
             <div class="stat-number">5+</div>
-            <div class="stat-label">Years across IT operations, service management & engineering</div>
+            <div class="stat-label">Years in IT & Service Management</div>
           </div>
           <div class="stat-card">
+            <div class="stat-number" style="font-size:2.5rem;line-height:1.2;">🇩🇰 🇧🇪 🇷🇴</div>
+            <div class="stat-label">Countries Worked In</div>
+          </div>
+          <div class="stat-card stat-featured">
             <div class="stat-number">12/12</div>
-            <div class="stat-label">Master's thesis grade — Top Academic Honor<br><span style="font-size:0.75rem;color:#f4ede0;margin-top:0.3rem;display:block;">Completed the education 8 months ahead of schedule through an accelerated path</span></div>
+            <div class="stat-label">Thesis Grade · Top Academic Honor</div>
+            <div class="stat-note">Perfect Score · Aarhus University</div>
           </div>
-          <div class="stat-card">
+          <div class="stat-card stat-featured">
             <div class="stat-number">8</div>
-            <div class="stat-label">Projects delivered across academia and industry</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number" style="font-size:1.5rem;">🇩🇰 🇧🇪 🇷🇴</div>
-            <div class="stat-label">Denmark · Belgium · Romania</div>
+            <div class="stat-label">Months Early · Accelerated Graduation Path</div>
+            <div class="stat-note">University Ranking</div>
+            <div class="stat-note">#37 Europe · #101 World</div>
           </div>
         </div>
       </div>
@@ -1130,37 +1839,82 @@
     <div class="container">
       <p class="section-label" style="display:none;">Academic Background</p>
       <h2 class="section-title" style="font-family:'Montserrat',sans-serif;color:var(--accent);font-weight:700;">Academic Background</h2>
-      <div class="timeline">
+      <div class="timeline-v2">
 
-        <div class="timeline-item">
-          <div class="timeline-period">Sep 2024 — Jan 2026</div>
-          <div class="timeline-body">
-            <div class="timeline-institution">Aarhus University · Herning, Denmark</div>
-            <div class="timeline-degree">MSc in Engineering (Technology Based Business Development)</div>
-            <p style="text-align:center;">Completed a 120 ECTS engineering master's in approximately 16 months, a programme designed for 24. Graduated ahead of schedule with the highest possible thesis grade, while conducting real-world projects inside the LEGO Group, Maersk, and Port Esbjerg. The degree sits at the intersection of engineering and business: rigorous in methods, applied in context, covering data governance, business model innovation, AI evaluation, Six Sigma, and machine learning.</p>
-            <div style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;margin:1rem 0;justify-content:center;">
-              <div style="display:flex;align-items:baseline;gap:6px;">
-                <span style="font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);">Danish GPA</span>
-                <span style="font-size:1.8rem;font-weight:700;color:var(--navy);line-height:1;">9.7</span>
-                <span style="font-size:0.85rem;color:var(--text-muted);font-weight:400;">/ 12</span>
+        <!-- MSc — Featured -->
+        <div class="tl-entry tl-featured">
+          <div class="tl-aside">
+            <div class="tl-dot"></div>
+            <div class="tl-line-seg"></div>
+          </div>
+          <div class="tl-body">
+            <div class="tl-when">Sep 2024 — Jan 2026</div>
+            <div class="tl-card tl-dark">
+              <div class="tl-institution">Aarhus University · Herning, Denmark</div>
+              <div class="tl-rank">#37 in Europe &nbsp;·&nbsp; #101 in the World</div>
+              <div class="tl-degree">MSc in Engineering</div>
+              <div class="tl-subtitle">Technology Based Business Development</div>
+              <p class="tl-desc">Completed a 120 ECTS master's programme designed for 24 months in just 16 — graduating 8 months ahead of schedule. Conducted applied research and industry projects inside the LEGO Group, Maersk, and Port Esbjerg, operating at the intersection of engineering rigour and business strategy.</p>
+
+              <div class="tl-thesis">
+                <div class="tl-thesis-grade"><span class="thesis-num">12</span><span class="thesis-denom">/12</span></div>
+                <div>
+                  <div class="tl-thesis-title">Master's Thesis — Top Academic Honor</div>
+                  <div class="tl-thesis-sub">A Grade · Design Science Research · Data Governance · LEGO Group</div>
+                </div>
               </div>
-              <div style="width:1px;height:36px;background:var(--border);"></div>
-              <div style="display:flex;align-items:baseline;gap:6px;">
-                <span style="font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);">USA GPA</span>
-                <span style="font-size:1.8rem;font-weight:700;color:var(--navy);line-height:1;">3.7</span>
-                <span style="font-size:0.85rem;color:var(--text-muted);font-weight:400;">/ 4.0</span>
+
+              <div class="tl-gpa-row">
+                <div class="tl-gpa-item">
+                  <div class="tl-gpa-label">Danish GPA</div>
+                  <div class="tl-gpa-inline">
+                    <span class="gpa-num" data-target="9.7">9.7</span>
+                    <span class="tl-gpa-max">/ 12</span>
+                  </div>
+                </div>
+                <div class="tl-gpa-sep"></div>
+                <div class="tl-gpa-item">
+                  <div class="tl-gpa-label">USA Equivalent</div>
+                  <div class="tl-gpa-inline">
+                    <span class="gpa-num" data-target="3.7">3.7</span>
+                    <span class="tl-gpa-max">/ 4.0</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tl-tags">
+                <span class="tl-tag">Data Governance</span>
+                <span class="tl-tag">Business Model Innovation</span>
+                <span class="tl-tag">AI Evaluation</span>
+                <span class="tl-tag">Six Sigma</span>
+                <span class="tl-tag">Machine Learning</span>
+                <span class="tl-tag">Design Science</span>
+                <span class="tl-tag">Project Management</span>
               </div>
             </div>
-            <div style="text-align:center;"><span class="badge">Thesis Grade: 12 / A — Top Academic Honor</span></div>
           </div>
         </div>
 
-        <div class="timeline-item">
-          <div class="timeline-period">Sep 2020 — Jun 2024</div>
-          <div class="timeline-body">
-            <div class="timeline-institution">VIA University College · Horsens, Denmark</div>
-            <div class="timeline-degree">BSc Software Engineering</div>
-            <p>Three and a half years of software engineering fundamentals, covering the full development stack from object-oriented design in Java and C# / .NET, through databases, agile methodologies, and end-to-end product delivery.</p>
+        <!-- BSc -->
+        <div class="tl-entry">
+          <div class="tl-aside">
+            <div class="tl-dot"></div>
+          </div>
+          <div class="tl-body">
+            <div class="tl-when">Sep 2020 — Jun 2024</div>
+            <div class="tl-card">
+              <div class="tl-institution">VIA University College · Horsens, Denmark</div>
+              <div class="tl-degree tl-degree-light">BSc Software Engineering</div>
+              <p class="tl-desc tl-desc-light">Three and a half years of software engineering fundamentals — from object-oriented design and system architecture through to databases, agile delivery, and end-to-end product development. Thesis delivered as a live full-stack application for a real client, shipped to production with JWT authentication, five CI/CD pipelines, and real-time booking via SignalR.</p>
+              <div class="tl-tags" style="margin-top:1.25rem;">
+                <span class="tl-tag tl-tag-light">Java</span>
+                <span class="tl-tag tl-tag-light">C# / .NET</span>
+                <span class="tl-tag tl-tag-light">SQL / PostgreSQL</span>
+                <span class="tl-tag tl-tag-light">React</span>
+                <span class="tl-tag tl-tag-light">Agile / Scrum</span>
+                <span class="tl-tag tl-tag-light">CI/CD</span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1170,77 +1924,142 @@
 
   <!-- EXPERIENCE -->
   <section id="experience">
+    <div class="exp-progress-rail" aria-hidden="true">
+      <div class="exp-progress-fill"></div>
+      <div class="exp-progress-dot"></div>
+    </div>
     <div class="container">
       <p class="section-label" style="display:none;">Professional Background</p>
       <h2 class="section-title" style="font-family:'Montserrat',sans-serif;color:var(--accent);font-weight:700;">Professional Experience</h2>
 
-      <div class="exp-item">
-        <div class="exp-header">
-          <div>
-            <div class="exp-company">Maersk</div>
-            <div class="exp-role">IT Student Assistant (IT Operations & Service Management)</div>
-            <div class="exp-location">Aarhus, Denmark</div>
-          </div>
-          <div class="exp-period">Nov 2023 — Jan 2026</div>
-        </div>
-        <ul class="exp-points">
-          <li>Delivered IT operations across four business-critical sites spanning roughly 500 users, covering the full technology stack from infrastructure to end-user support across environments as diverse as air cargo, port logistics, and corporate offices.</li>
-          <li>Drove a company-wide device modernisation programme, transitioning around 300 employees from traditional to modern managed devices with zero operational disruption from planning through to deployment.</li>
-          <li>Identified inefficiencies in ServiceNow beyond the scope of the role and took it upon myself to fix them, redesigning workflows and data practices to improve platform reliability and support data-driven service management.</li>
-          <li>Managed the full IT asset lifecycle in collaboration with external vendors, including decommissioning audits and residual value recovery.</li>
-        </ul>
-      </div>
+      <div class="exp-entries">
 
-      <div class="exp-item">
-        <div class="exp-header">
-          <div>
-            <div class="exp-company">NATO Communications and Information Agency</div>
-            <div class="exp-role">Service Support & Business Application Intern</div>
-            <div class="exp-location">Mons, Belgium</div>
+        <!-- Maersk -->
+        <div class="exp-entry">
+          <div class="exp-sticky">
+            <div class="exp-co-name">Maersk</div>
+            <div class="exp-co-context">Global Logistics Leader</div>
+            <div class="exp-role-title">IT Student Assistant</div>
+            <div class="exp-role-title" style="font-weight:400;color:var(--text-muted);font-size:0.82rem;">IT Operations &amp; Service Management</div>
+            <div class="exp-role-period">Nov 2023 — Jan 2026</div>
+            <div class="exp-role-location">Aarhus, Denmark</div>
           </div>
-          <div class="exp-period">Mar 2023 — Aug 2023</div>
-        </div>
-        <ul class="exp-points">
-          <li>Acted as the point of contact between military and civilian entities to resolve mission-critical logistics system failures.</li>
-          <li>Administered logistics systems across Azure and VMware environments, ensuring high availability within an Agile framework.</li>
-          <li>Maintained 100% adherence to NATO protocols across asset lifecycle management and high-security documentation.</li>
-          <li>Troubleshot complex issues in a multicultural setting, translating technical constraints into clear updates for leadership.</li>
-        </ul>
-      </div>
-
-      <div class="exp-item">
-        <div class="exp-header">
-          <div>
-            <div class="exp-company">Cegeka</div>
-            <div class="exp-role">IT Support Engineer</div>
-            <div class="exp-location">Iași, Romania</div>
+          <div class="exp-content">
+            <div class="exp-ctx">
+              <div class="exp-ctx-item">4 business-critical sites</div>
+              <div class="exp-ctx-item">~500 users</div>
+              <div class="exp-ctx-item">Air cargo &amp; port logistics</div>
+            </div>
+            <ul class="exp-bullets">
+              <li>Planned and coordinated a 300-person hardware modernisation from scoping to deployment, with zero operational disruption throughout.</li>
+              <li>Built an incident analysis workflow across 5,000 ServiceNow tickets that cut classification effort by 92% — from DKK 65,835 to DKK 5,138.</li>
+              <li>Redesigned ServiceNow workflows and data practices to improve platform reliability and support better service management decisions.</li>
+              <li>Managed the full IT asset lifecycle with external vendors, covering decommissioning audits and residual value recovery.</li>
+            </ul>
+            <div class="exp-tags-row">
+              <span class="exp-tag-pill">ServiceNow</span>
+              <span class="exp-tag-pill">ITIL</span>
+              <span class="exp-tag-pill">Azure</span>
+              <span class="exp-tag-pill">Asset Management</span>
+              <span class="exp-tag-pill">IT Operations</span>
+            </div>
           </div>
-          <div class="exp-period">May 2019 — Jul 2019</div>
         </div>
-        <ul class="exp-points">
-          <li>Ensured service continuity for 140+ global customers through backup operations, disaster recovery health checks, and proactive SLA management.</li>
-          <li>Spotted gaps in how recurring issues were being handled and took the initiative to document proper resolution procedures, which noticeably reduced resolution times going forward.</li>
-        </ul>
-      </div>
 
-      <div class="exp-item">
-        <div class="exp-header">
-          <div>
-            <div class="exp-company">Capgemini</div>
-            <div class="exp-role">Incident Manager — IT Support Engineer</div>
-            <div class="exp-location">Iași, Romania</div>
+        <!-- NATO -->
+        <div class="exp-entry">
+          <div class="exp-sticky">
+            <div class="exp-co-name">NATO</div>
+            <div class="exp-co-context">Communications &amp; Information Agency · 30-nation Alliance</div>
+            <div class="exp-role-title">Service Support &amp; Business Applications Intern</div>
+            <div class="exp-role-period">Mar 2023 — Aug 2023</div>
+            <div class="exp-role-location">Mons, Belgium</div>
           </div>
-          <div class="exp-period">Nov 2017 — May 2019</div>
+          <div class="exp-content">
+            <div class="exp-ctx">
+              <div class="exp-ctx-item">LOGFAS team</div>
+              <div class="exp-ctx-item">Multinational logistics</div>
+              <div class="exp-ctx-item">Allied deployment planning</div>
+            </div>
+            <ul class="exp-bullets">
+              <li>Administered NATO's logistics systems (LOGFAS) across Windows, Azure, and VMware within an Agile team supporting allied deployment planning.</li>
+              <li>Owned Identity and Access Management for LOGNET, responsible for access governance across approximately 2,000 LOGFAS users.</li>
+              <li>Coordinated incident management between military and civilian stakeholders and produced user and administration documentation.</li>
+            </ul>
+            <div class="exp-tags-row">
+              <span class="exp-tag-pill">Azure</span>
+              <span class="exp-tag-pill">VMware</span>
+              <span class="exp-tag-pill">LOGFAS</span>
+              <span class="exp-tag-pill">IAM</span>
+              <span class="exp-tag-pill">Agile</span>
+              <span class="exp-tag-pill">ITSM</span>
+            </div>
+          </div>
         </div>
-        <ul class="exp-points">
-          <li>Progressed from IT Support Engineer to Incident Manager within a 24/7 enterprise operations centre, taking on direct supervisory responsibility for up to 30 engineers during peak hours and 5 to 8 in off-hours windows.</li>
-          <li>Redesigned incident routing by introducing a 4-team reassignment lock policy, which eliminated reassignment loops, enforced structured escalation, and reduced unnecessary resolution delays across the organisation.</li>
-          <li>Built ServiceNow automation for real-time Major Incident alerting, significantly improving response speed and helping the team consistently meet SLA thresholds under high-volume conditions.</li>
-          <li>Conducted Root Cause Analysis on recurring failure patterns that had never been formally documented, turning the findings into procedures that closed persistent knowledge gaps across the operations team.</li>
-          <li>Led training workshops on incident handling and escalation best practices, building capability across the service desk.</li>
-        </ul>
-      </div>
 
+        <!-- Cegeka -->
+        <div class="exp-entry">
+          <div class="exp-sticky">
+            <div class="exp-co-name">Cegeka</div>
+            <div class="exp-co-context">Belgian IT Services Group</div>
+            <div class="exp-role-title">IT Support Engineer</div>
+            <div class="exp-role-period">May 2019 — Jul 2019</div>
+            <div class="exp-role-location">Iași, Romania</div>
+          </div>
+          <div class="exp-content">
+            <div class="exp-ctx">
+              <div class="exp-ctx-item">Managed services</div>
+              <div class="exp-ctx-item">140+ global customers</div>
+              <div class="exp-ctx-item">SLA &amp; disaster recovery</div>
+            </div>
+            <ul class="exp-bullets">
+              <li>Maintained service continuity for 140+ global customers through backup operations, disaster recovery checks, and proactive SLA management.</li>
+              <li>Spotted gaps in how recurring issues were being tracked, documented proper resolution procedures, and reduced repeat handling time as a result.</li>
+            </ul>
+            <div class="exp-tags-row">
+              <span class="exp-tag-pill">SLA Management</span>
+              <span class="exp-tag-pill">Disaster Recovery</span>
+              <span class="exp-tag-pill">ITSM</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Capgemini -->
+        <div class="exp-entry">
+          <div class="exp-sticky">
+            <div class="exp-co-name">Capgemini</div>
+            <div class="exp-co-context">Global Consulting &amp; Technology</div>
+            <div class="exp-promo-flow">
+              <span>IT Support Engineer</span>
+              <span class="exp-promo-arrow">→</span>
+              <span>Incident Manager</span>
+            </div>
+            <div class="exp-role-period">Nov 2017 — May 2019</div>
+            <div class="exp-role-location">Iași, Romania</div>
+          </div>
+          <div class="exp-content">
+            <div class="exp-ctx">
+              <div class="exp-ctx-item">Carnival Cruise Lines</div>
+              <div class="exp-ctx-item">24/7 IT operations</div>
+              <div class="exp-ctx-item">USA, Asia &amp; Australia</div>
+            </div>
+            <ul class="exp-bullets">
+              <li>Progressed from IT Support Engineer to Incident Manager in a 24/7 operations centre (Carnival Cruise Lines account) serving the USA, Asia, and Australia, with supervisory responsibility for up to 30 engineers.</li>
+              <li>Reduced resolution times through OLA enforcement and process improvements; accelerated Major Incident response with ServiceNow automation.</li>
+              <li>Conducted Root Cause Analysis on recurring failure patterns and formalised the findings into procedures, cutting repeat ticket volume across the team.</li>
+              <li>Led training workshops on incident handling and escalation practices, building capability across the service desk.</li>
+            </ul>
+            <div class="exp-tags-row">
+              <span class="exp-tag-pill">ServiceNow</span>
+              <span class="exp-tag-pill">ITIL</span>
+              <span class="exp-tag-pill">Incident Management</span>
+              <span class="exp-tag-pill">Root Cause Analysis</span>
+              <span class="exp-tag-pill">Team Leadership</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </section>
 
@@ -1609,7 +2428,7 @@
     // ── Scroll animations — A + C ──────────────────────
 
     // Section-level scale + fade (Option A)
-    const sectionEls = document.querySelectorAll('.timeline-item, .exp-item, .stat-card, .skill-group');
+    const sectionEls = document.querySelectorAll('.tl-card, .exp-item, .stat-card, .skill-group');
     sectionEls.forEach(el => {
       el.style.opacity = '0';
       el.style.transform = 'scale(0.96) translateY(24px)';
@@ -1621,12 +2440,23 @@
         if (entry.isIntersecting) {
           entry.target.style.opacity = '1';
           entry.target.style.transform = 'scale(1) translateY(0)';
+          if (entry.target.classList.contains('stat-card')) {
+            const numEl = entry.target.querySelector('.stat-number');
+            const si = parseInt(entry.target.dataset.staggerIdx || '0');
+            if (numEl) setTimeout(() => animateCounter(numEl), 220 + si * 150);
+          }
           sectionObserver.unobserve(entry.target);
         }
       });
     }, { threshold: 0.1 });
 
     sectionEls.forEach(el => sectionObserver.observe(el));
+
+    // Stagger about medals — each card gets an index-based transition delay
+    document.querySelectorAll('.about-stats .stat-card').forEach((card, i) => {
+      card.dataset.staggerIdx = i;
+      card.style.transition = `opacity 0.55s cubic-bezier(0.22,1,0.36,1) ${i * 0.15}s, transform 0.55s cubic-bezier(0.22,1,0.36,1) ${i * 0.15}s`;
+    });
 
     // Staggered card reveal (Option C)
     document.querySelectorAll('.projects-grid').forEach(grid => {
@@ -1673,6 +2503,375 @@
     }, { threshold: 0.05 });
 
     if (legoPair.length) legoObserver.observe(legoPair[0].closest('[style*="grid-column"]') || legoPair[0]);
+
+    // ── Nav transparency / glassmorphism ───────────────
+    const navEl = document.querySelector('nav');
+    function updateNavState() {
+      if (window.scrollY > 80) navEl.classList.add('scrolled');
+      else navEl.classList.remove('scrolled');
+    }
+    updateNavState();
+    window.addEventListener('scroll', updateNavState, { passive: true });
+
+    // ── Hero canvas orb animation ──────────────────────
+    const heroCanvas = document.getElementById('heroCanvas');
+    if (heroCanvas) {
+      const hctx = heroCanvas.getContext('2d');
+      function resizeHeroCanvas() {
+        heroCanvas.width = heroCanvas.offsetWidth;
+        heroCanvas.height = heroCanvas.offsetHeight;
+      }
+      resizeHeroCanvas();
+      window.addEventListener('resize', resizeHeroCanvas, { passive: true });
+
+      const orbDefs = [
+        { fx:0.12, fy:0.25, r:260, dx:0.18, dy:0.12,  rgb:[42,82,152],   a:0.44 },
+        { fx:0.80, fy:0.68, r:320, dx:-0.12, dy:0.14,  rgb:[200,169,110], a:0.22 },
+        { fx:0.52, fy:0.08, r:210, dx:0.20, dy:-0.10,  rgb:[30,64,128],   a:0.38 },
+        { fx:0.92, fy:0.22, r:175, dx:-0.16, dy:0.20,  rgb:[200,169,110], a:0.17 },
+        { fx:0.20, fy:0.82, r:270, dx:0.14, dy:-0.12,  rgb:[42,82,152],   a:0.30 },
+        { fx:0.62, fy:0.52, r:195, dx:-0.10, dy:-0.16, rgb:[13,37,69],    a:0.55 },
+      ];
+
+      let canvasOrbs = [];
+      function initCanvasOrbs() {
+        const W = heroCanvas.width, H = heroCanvas.height;
+        canvasOrbs = orbDefs.map(d => ({ ...d, px: d.fx * W, py: d.fy * H }));
+      }
+      initCanvasOrbs();
+      window.addEventListener('resize', initCanvasOrbs, { passive: true });
+
+      let heroMX = 0, heroMY = 0, heroTX = 0, heroTY = 0;
+      let photoTiltX = 0, photoTiltY = 0, targetTiltX = 0, targetTiltY = 0;
+      const photoParallaxEl = document.querySelector('.hero-photo-parallax');
+      const heroTextParEl   = document.querySelector('.hero-text');
+
+      document.addEventListener('mousemove', (e) => {
+        if (window.scrollY < window.innerHeight) {
+          heroTX = (e.clientX / window.innerWidth  - 0.5) * 40;
+          heroTY = (e.clientY / window.innerHeight - 0.5) * 25;
+        }
+      });
+
+      if (photoParallaxEl) {
+        photoParallaxEl.addEventListener('mousemove', (e) => {
+          const rect = photoParallaxEl.getBoundingClientRect();
+          targetTiltX = ((e.clientY - (rect.top  + rect.height / 2)) / (rect.height / 2)) * -12;
+          targetTiltY = ((e.clientX - (rect.left + rect.width  / 2)) / (rect.width  / 2)) *  12;
+        });
+        photoParallaxEl.addEventListener('mouseleave', () => { targetTiltX = 0; targetTiltY = 0; });
+      }
+
+      function animateHeroCanvas(ts) {
+        const W = heroCanvas.width, H = heroCanvas.height;
+        hctx.clearRect(0, 0, W, H);
+        const t = ts * 0.001;
+        heroMX += (heroTX - heroMX) * 0.05;
+        heroMY += (heroTY - heroMY) * 0.05;
+        photoTiltX += (targetTiltX - photoTiltX) * 0.1;
+        photoTiltY += (targetTiltY - photoTiltY) * 0.1;
+        if (photoParallaxEl) photoParallaxEl.style.transform = `perspective(800px) translate(${(heroMX * 0.45).toFixed(2)}px, ${(heroMY * 0.3).toFixed(2)}px) rotateX(${photoTiltX.toFixed(2)}deg) rotateY(${photoTiltY.toFixed(2)}deg)`;
+        if (heroTextParEl)   heroTextParEl.style.transform   = `translate(${(-heroMX * 0.18).toFixed(2)}px, ${(-heroMY * 0.12).toFixed(2)}px)`;
+        canvasOrbs.forEach((o, i) => {
+          o.px += o.dx; o.py += o.dy;
+          if (o.px < -o.r) o.px = W + o.r;
+          if (o.px > W + o.r) o.px = -o.r;
+          if (o.py < -o.r) o.py = H + o.r;
+          if (o.py > H + o.r) o.py = -o.r;
+          const pf    = o.r / 280;
+          const drawX = o.px + heroMX * pf;
+          const drawY = o.py + heroMY * pf;
+          const pulse = 1 + Math.sin(t * 0.4 + i * 1.3) * 0.12;
+          const effA  = Math.min(o.a * pulse, 1);
+          const g = hctx.createRadialGradient(drawX, drawY, 0, drawX, drawY, o.r);
+          g.addColorStop(0, `rgba(${o.rgb},${effA.toFixed(3)})`);
+          g.addColorStop(1, `rgba(${o.rgb},0)`);
+          hctx.fillStyle = g;
+          hctx.beginPath();
+          hctx.arc(drawX, drawY, o.r, 0, Math.PI * 2);
+          hctx.fill();
+        });
+        requestAnimationFrame(animateHeroCanvas);
+      }
+      requestAnimationFrame(animateHeroCanvas);
+    }
+
+    // ── Stat counter animation ─────────────────────────
+    function animateCounter(el) {
+      const text = el.textContent.trim();
+      const match = text.match(/^(\d+)/);
+      if (!match) return;
+      const target = parseInt(match[1], 10);
+      const suffix = text.slice(match[1].length);
+      const duration = 1400;
+      const start = performance.now();
+      function tick(now) {
+        const t = Math.min((now - start) / duration, 1);
+        el.textContent = Math.round((1 - Math.pow(1 - t, 3)) * target) + suffix;
+        if (t < 1) {
+          requestAnimationFrame(tick);
+        } else {
+          el.classList.add('num-pop');
+          setTimeout(() => el.classList.remove('num-pop'), 450);
+        }
+      }
+      requestAnimationFrame(tick);
+    }
+
+    // ── About paragraph stagger ───────────────────────
+    const aboutParas = document.querySelectorAll('.about-text p');
+    aboutParas.forEach((p, i) => {
+      p.style.opacity = '0';
+      p.style.transform = 'translateY(16px)';
+      p.style.transition = `opacity 0.6s cubic-bezier(0.22,1,0.36,1) ${i * 0.13}s, transform 0.6s cubic-bezier(0.22,1,0.36,1) ${i * 0.13}s`;
+    });
+    const aboutTextEl = document.querySelector('.about-text');
+    if (aboutTextEl) {
+      new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            aboutParas.forEach(p => { p.style.opacity = '1'; p.style.transform = 'translateY(0)'; });
+          }
+        });
+      }, { threshold: 0.1 }).observe(aboutTextEl);
+    }
+
+    // ── Section title entrance + line draw ────────────
+    const titleEls = document.querySelectorAll('.section-title');
+    titleEls.forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = 'opacity 0.65s cubic-bezier(0.22,1,0.36,1), transform 0.65s cubic-bezier(0.22,1,0.36,1)';
+    });
+    const titleObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+          entry.target.classList.add('revealed');
+          titleObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    titleEls.forEach(el => titleObserver.observe(el));
+
+    // ── Education timeline line + GPA counters ─────────
+    const tlLineSeg = document.querySelector('.tl-line-seg');
+    if (tlLineSeg) {
+      new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add('revealed');
+        });
+      }, { threshold: 0.2 }).observe(tlLineSeg);
+    }
+
+    function animateDecimalCounter(el) {
+      const target = parseFloat(el.dataset.target);
+      const decimals = (el.dataset.target.split('.')[1] || '').length;
+      const duration = 1400;
+      const start = performance.now();
+      function tick(now) {
+        const t = Math.min((now - start) / duration, 1);
+        el.textContent = ((1 - Math.pow(1 - t, 3)) * target).toFixed(decimals);
+        if (t < 1) {
+          requestAnimationFrame(tick);
+        } else {
+          el.classList.add('num-pop');
+          setTimeout(() => el.classList.remove('num-pop'), 450);
+        }
+      }
+      requestAnimationFrame(tick);
+    }
+
+    document.querySelectorAll('.gpa-num').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transition = 'opacity 0.5s ease';
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            animateDecimalCounter(entry.target);
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+      obs.observe(el);
+    });
+
+    // ── Education: thesis counter ─────────────────────
+    const thesisNum   = document.querySelector('.thesis-num');
+    const thesisDenom = document.querySelector('.thesis-denom');
+    if (thesisNum && thesisDenom) {
+      thesisDenom.style.opacity = '0';
+      thesisDenom.style.transition = 'opacity 0.4s ease 0.1s';
+      thesisNum.textContent = '0';
+      const thesisObs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const dur = 1200, t0 = performance.now();
+          (function tick(now) {
+            const t = Math.min((now - t0) / dur, 1);
+            thesisNum.textContent = Math.round((1 - Math.pow(1 - t, 3)) * 12);
+            if (t < 1) { requestAnimationFrame(tick); }
+            else {
+              thesisDenom.style.opacity = '1';
+              thesisNum.closest('.tl-thesis-grade').classList.add('num-pop');
+              setTimeout(() => thesisNum.closest('.tl-thesis-grade').classList.remove('num-pop'), 450);
+            }
+          })(t0);
+          thesisObs.unobserve(entry.target);
+        });
+      }, { threshold: 0.6 });
+      thesisObs.observe(thesisNum);
+    }
+
+    // ── Education: card 3D tilt (all entries) ─────────
+    document.querySelectorAll('.tl-card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const r  = card.getBoundingClientRect();
+        const dx = (e.clientX - (r.left + r.width  / 2)) / (r.width  / 2);
+        const dy = (e.clientY - (r.top  + r.height / 2)) / (r.height / 2);
+        card.style.transform = `perspective(1100px) rotateX(${(-dy * 3.5).toFixed(2)}deg) rotateY(${(dx * 3.5).toFixed(2)}deg)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(1100px) rotateX(0deg) rotateY(0deg)';
+        setTimeout(() => { card.style.transform = ''; }, 300);
+      });
+    });
+
+    // ── Education: staggered tag entrance ─────────────
+    document.querySelectorAll('.tl-tags').forEach(container => {
+      const tags = Array.from(container.querySelectorAll('.tl-tag'));
+      tags.forEach(tag => {
+        tag.style.opacity = '0';
+        tag.style.transform = 'translateY(8px)';
+        tag.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+      });
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          tags.forEach((tag, i) => setTimeout(() => {
+            tag.style.opacity = '1';
+            tag.style.transform = 'translateY(0)';
+          }, i * 45));
+          obs.unobserve(entry.target);
+        });
+      }, { threshold: 0.2 });
+      obs.observe(container);
+    });
+
+    // ── Experience: active card on scroll ─────────────
+    (function () {
+      const cards = document.querySelectorAll('.exp-entry');
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => e.target.classList.toggle('is-active', e.isIntersecting));
+      }, { threshold: 0.25, rootMargin: '-8% 0px -8% 0px' });
+      cards.forEach(c => obs.observe(c));
+    })();
+
+    // ── Experience: scroll progress rail ─────────────
+    (function () {
+      const expSec  = document.getElementById('experience');
+      const expFill = document.querySelector('.exp-progress-fill');
+      const expDot  = document.querySelector('.exp-progress-dot');
+      if (!expSec || !expFill || !expDot) return;
+      window.addEventListener('scroll', () => {
+        const rect   = expSec.getBoundingClientRect();
+        const total  = expSec.offsetHeight - window.innerHeight;
+        const pct    = total > 0 ? Math.max(0, Math.min(100, (-rect.top / total) * 100)) : 0;
+        expFill.style.height = pct + '%';
+        expDot.style.top     = pct + '%';
+      }, { passive: true });
+    })();
+
+    // ── Experience: context chip stagger ─────────────
+    document.querySelectorAll('.exp-ctx').forEach(ctx => {
+      const chips = ctx.querySelectorAll('.exp-ctx-item');
+      chips.forEach(c => {
+        c.style.opacity = '0';
+        c.style.transform = 'translateY(8px)';
+        c.style.transition = 'opacity 0.35s ease, transform 0.35s ease, background 0.2s ease, border-left-color 0.2s ease';
+      });
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          chips.forEach((c, i) => setTimeout(() => {
+            c.style.opacity = '1';
+            c.style.transform = 'translateY(0)';
+          }, i * 70));
+          obs.unobserve(entry.target);
+        });
+      }, { threshold: 0.3 });
+      obs.observe(ctx);
+    });
+
+    // ── Experience metric counters ────────────────────
+    document.querySelectorAll('.exp-counter').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transition = 'opacity 0.4s ease';
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          entry.target.style.opacity = '1';
+          animateCounter(entry.target);
+          obs.unobserve(entry.target);
+        });
+      }, { threshold: 0.5 });
+      obs.observe(el);
+    });
+
+    // ── Experience bullet stagger ─────────────────────
+    document.querySelectorAll('.exp-bullets').forEach(list => {
+      const items = list.querySelectorAll('li');
+      items.forEach(li => {
+        li.style.opacity = '0';
+        li.style.transform = 'translateY(12px)';
+        li.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+      });
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          items.forEach((li, i) => setTimeout(() => {
+            li.style.opacity = '1';
+            li.style.transform = 'translateY(0)';
+          }, i * 80));
+          obs.unobserve(entry.target);
+        });
+      }, { threshold: 0.1 });
+      obs.observe(list);
+    });
+
+    // ── About medals mouse parallax ───────────────────
+    const aboutSection  = document.getElementById('about');
+    const aboutStatsCol = document.querySelector('.about-stats');
+    let aboutTX = 0, aboutTY = 0, aboutMX = 0, aboutMY = 0;
+    if (aboutSection && aboutStatsCol) {
+      aboutSection.addEventListener('mousemove', (e) => {
+        aboutTX = (e.clientX / window.innerWidth  - 0.5) * 12;
+        aboutTY = (e.clientY / window.innerHeight - 0.5) *  8;
+      });
+      aboutSection.addEventListener('mouseleave', () => { aboutTX = 0; aboutTY = 0; });
+      (function loopAbout() {
+        aboutMX += (aboutTX - aboutMX) * 0.07;
+        aboutMY += (aboutTY - aboutMY) * 0.07;
+        aboutStatsCol.style.transform = `translate(${aboutMX.toFixed(2)}px,${aboutMY.toFixed(2)}px)`;
+        requestAnimationFrame(loopAbout);
+      })();
+    }
+
+    // ── Magnetic CTA button ────────────────────────────
+    const ctaBtn = document.querySelector('.hero-cta');
+    if (ctaBtn) {
+      ctaBtn.addEventListener('mousemove', (e) => {
+        const r  = ctaBtn.getBoundingClientRect();
+        const dx = (e.clientX - (r.left + r.width  / 2)) * 0.35;
+        const dy = (e.clientY - (r.top  + r.height / 2)) * 0.35;
+        ctaBtn.style.transform = `translate(${dx.toFixed(2)}px, ${dy.toFixed(2)}px) translateY(-2px)`;
+      });
+      ctaBtn.addEventListener('mouseleave', () => {
+        ctaBtn.style.transform = 'translateY(0)';
+      });
+    }
 
   </script>
 </body>
