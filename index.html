@@ -119,7 +119,6 @@
       transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s ease, border-color 0.3s ease !important;
     }
     .project-card:hover {
-      transform: translateY(-6px) scale(1.01) !important;
       box-shadow: 0 12px 40px rgba(13,37,69,0.12) !important;
       border-color: var(--accent) !important;
     }
@@ -147,6 +146,16 @@
     .skill-group:hover {
       transform: translateY(-3px) !important;
       box-shadow: 0 6px 20px rgba(13,37,69,0.08) !important;
+    }
+
+    /* ─── SKILL LINE REVEAL ──────────────────────────── */
+    .skill-group-title::after {
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.55s cubic-bezier(0.22,1,0.36,1) 0.2s;
+    }
+    .skill-group.is-visible .skill-group-title::after {
+      transform: scaleX(1);
     }
 
     /* ─── PRINT STYLESHEET ────────────────────────────── */
@@ -404,79 +413,85 @@
     /* ─── FOOTER ──────────────────────────────────────── */
     footer {
       background: var(--navy);
-      padding: 4rem 2rem 2rem;
-      text-align: center;
+      padding: 3.5rem 2rem 2rem;
     }
 
-    .footer-name {
-      font-family: 'Montserrat', sans-serif;
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: -0.02em;
-      margin-bottom: 0.5rem;
-    }
-
-    .footer-tagline {
-      font-size: 0.85rem;
-      color: rgba(255,255,255,0.45);
-      font-style: italic;
-      margin-bottom: 2.5rem;
-    }
-
-    .footer-contacts {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin-bottom: 3rem;
-    }
-
-    .footer-contact-btn {
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.55rem 1.2rem;
-      border-radius: 30px;
-      border: 1px solid rgba(255,255,255,0.15);
-      color: rgba(255,255,255,0.75);
-      text-decoration: none;
-      font-size: 0.8rem;
-      font-weight: 500;
-      transition: border-color 0.2s, color 0.2s;
-    }
-
-    .footer-contact-btn:hover { border-color: var(--accent); color: var(--accent); }
-
-    .footer-divider {
-      width: 40px;
-      height: 1px;
-      background: rgba(200,169,110,0.4);
-      margin: 0 auto 1.5rem;
-    }
-
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
+      justify-content: space-between;
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
       margin-bottom: 1.5rem;
     }
 
-    .footer-links a {
-      color: rgba(255,255,255,0.4);
-      text-decoration: none;
-      transition: color 0.2s;
+    .footer-left { text-align: left; }
+
+    .footer-avail {
       display: flex;
       align-items: center;
-      gap: 0.4rem;
-      font-size: 0.8rem;
+      gap: 0.55rem;
+      margin-bottom: 1rem;
     }
 
-    .footer-links a:hover { color: var(--accent); }
+    .footer-avail-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #4ade80;
+      flex-shrink: 0;
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+
+    .footer-avail-text {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+
+    .footer-wordmark {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    .footer-icons {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .footer-icon-link {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: border-color 0.25s, color 0.25s, background 0.25s;
+    }
+
+    .footer-icon-link:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(200,169,110,0.08);
+    }
 
     .footer-copy {
-      font-size: 0.75rem;
-      color: rgba(255,255,255,0.25);
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.18);
+      text-align: center;
+      max-width: 1100px;
+      margin: 0 auto;
     }
 
     .hero-inner {
@@ -1491,33 +1506,386 @@
       font-weight: 500;
     }
 
-    /* ─── FOOTER ──────────────────────────────────────── */
-    footer {
-      background: var(--navy);
-      color: rgba(255,255,255,0.5);
-      text-align: center;
-      padding: 2.5rem 2rem;
-      font-size: 0.85rem;
+    /* ─── PROJECT SHOWCASE ───────────────────────────── */
+    .proj-showcase {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 5rem;
     }
 
-    .footer-links {
+    .proj-case {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 0 4rem;
+      padding: 3.5rem 0;
+      border-top: 1px solid var(--border);
+      position: relative;
+    }
+
+    .proj-case:last-child { border-bottom: 1px solid var(--border); }
+
+    .proj-case-left { padding-top: 0.15rem; }
+
+    .proj-case-num {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 3.8rem;
+      font-weight: 700;
+      color: rgba(13,37,69,0.07);
+      line-height: 1;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.4rem;
+      display: block;
+    }
+
+    .proj-case-org {
+      font-size: 0.67rem;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.3rem;
+      line-height: 1.5;
+    }
+
+    .proj-case-domain {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    .proj-case-metric {
       display: flex;
-      justify-content: center;
-      gap: 1.5rem;
+      align-items: center;
+      gap: 0.55rem;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--navy);
+      margin-bottom: 0.85rem;
+    }
+
+    .proj-case-metric::before {
+      content: '';
+      display: inline-block;
+      width: 22px;
+      height: 1.5px;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .proj-case-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.15;
       margin-bottom: 1rem;
     }
 
-    .footer-links a {
-      color: rgba(255,255,255,0.6);
-      text-decoration: none;
-      transition: color 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.85rem;
+    .proj-case-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.78;
+      margin-bottom: 1.25rem;
+      max-width: 560px;
     }
 
-    .footer-links a:hover { color: var(--accent); }
+    .proj-case-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .proj-case-expand {
+      background: none;
+      border: none;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--navy);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0;
+      letter-spacing: 0.03em;
+      text-decoration: underline;
+      text-decoration-color: transparent;
+      text-underline-offset: 3px;
+      transition: color 0.2s, text-decoration-color 0.2s;
+    }
+
+    .proj-case-expand:hover {
+      color: var(--accent);
+      text-decoration-color: var(--accent);
+    }
+
+    .proj-case.is-open .proj-case-expand { color: var(--accent); text-decoration-color: var(--accent); }
+
+    .proj-case-expand .expand-chevron {
+      transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
+      flex-shrink: 0;
+    }
+
+    .proj-case.is-open .expand-chevron { transform: rotate(180deg); }
+
+    .proj-case-detail {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.65s cubic-bezier(0.22,1,0.36,1);
+    }
+
+    .proj-case-detail-inner { padding-top: 2.5rem; }
+
+    /* Supporting grid */
+    .proj-grid-heading {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1.75rem;
+    }
+
+    .proj-support-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem 3rem;
+    }
+
+    .proj-support-card {
+      border-top: 2px solid var(--border);
+      padding-top: 1.5rem;
+      transition: border-top-color 0.3s ease;
+    }
+
+    .proj-support-card:hover { border-top-color: var(--accent); }
+
+    .proj-support-num {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+      margin-bottom: 0.3rem;
+    }
+
+    .proj-support-org {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      letter-spacing: 0.03em;
+      margin-bottom: 0.55rem;
+    }
+
+    .proj-support-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.25;
+      margin-bottom: 0.45rem;
+    }
+
+    .proj-support-metric {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--navy-mid);
+      margin-bottom: 0.9rem;
+    }
+
+    .proj-support-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
+    .proj-detail-type {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.85rem;
+    }
+
+    .proj-impact-callout {
+      border-left: 2px solid var(--accent);
+      padding: 0.75rem 1.2rem;
+      margin-bottom: 1.4rem;
+      background: var(--surface);
+      border-radius: 0 8px 8px 0;
+      font-size: 0.87rem;
+      font-weight: 600;
+      color: var(--navy);
+      line-height: 1.6;
+    }
+
+    .proj-split-card.is-dark .proj-impact-callout {
+      background: rgba(200,169,110,0.1);
+      color: rgba(255,255,255,0.9);
+    }
+
+    .proj-detail-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+      margin-bottom: 0.75rem;
+    }
+
+    .proj-detail-desc.on-dark { color: rgba(255,255,255,0.7); }
+
+    .proj-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    .proj-split-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+    }
+
+    .proj-split-card.is-dark {
+      background: var(--navy);
+      border: none;
+    }
+
+    .proj-split-label {
+      font-size: 0.63rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+    }
+
+    .proj-split-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 0.9rem;
+      line-height: 1.25;
+    }
+
+    .proj-split-title.on-dark { color: #fff; }
+
+    @media (max-width: 680px) {
+      .proj-case { grid-template-columns: 1fr; gap: 0.75rem 0; padding: 2.5rem 0; }
+      .proj-case-num { font-size: 2.5rem; margin-bottom: 0.5rem; }
+      .proj-case-title { font-size: 1.2rem; }
+      .proj-split { grid-template-columns: 1fr; }
+      .proj-support-grid { grid-template-columns: 1fr; }
+    }
+
+    .languages-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0 2.5rem;
+      padding: 1.5rem 0 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .language-item {
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+      padding: 0.3rem 0;
+    }
+
+    .language-name {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    .language-level {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      letter-spacing: 0.03em;
+    }
+
+    /* ─── TRAITS ──────────────────────────────────────── */
+    .traits-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .trait-card {
+      border-top: 2px solid var(--navy);
+      padding-top: 1.5rem;
+      transition: border-top-color 0.35s ease;
+    }
+
+    .trait-card:hover { border-top-color: var(--accent); }
+
+    .trait-num {
+      display: block;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: var(--accent);
+      margin-bottom: 0.9rem;
+    }
+
+    .trait-headline {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.12rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 0.9rem;
+      line-height: 1.3;
+    }
+
+    .trait-body {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.78;
+    }
+
+    .tools-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.75rem;
+      padding: 1.75rem 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.75rem;
+    }
+
+    .tools-label {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      white-space: nowrap;
+      padding-top: 0.18rem;
+      flex-shrink: 0;
+    }
+
+    .tools-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    @media (max-width: 680px) {
+      .traits-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .tools-row { flex-direction: column; gap: 0.85rem; }
+    }
+
+    @media (max-width: 600px) {
+      .footer-inner { flex-direction: column; align-items: flex-start; gap: 2rem; }
+      .footer-icons { gap: 0.6rem; }
+    }
 
     /* ─── FLOATING CONTACT BUTTON ─────────────────────── */
     .fab {
@@ -1544,15 +1912,15 @@
     .popup-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(13,37,69,0.55);
-      backdrop-filter: blur(4px);
+      background: rgba(5,15,30,0.7);
+      backdrop-filter: blur(6px);
       z-index: 300;
       display: flex;
       align-items: center;
       justify-content: center;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.25s;
+      transition: opacity 0.3s;
     }
 
     .popup-overlay.open {
@@ -1561,91 +1929,118 @@
     }
 
     .popup {
-      background: var(--surface);
-      border-radius: 16px;
-      padding: 2.5rem;
-      max-width: 420px;
+      background: var(--navy);
+      border-radius: 20px;
+      padding: 2.75rem 2.5rem 2.25rem;
+      max-width: 440px;
       width: 90%;
       position: relative;
-      transform: translateY(16px);
-      transition: transform 0.25s;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      transform: translateY(24px) scale(0.98);
+      transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
+      box-shadow: 0 32px 80px rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.07);
     }
 
-    .popup-overlay.open .popup { transform: translateY(0); }
+    .popup-overlay.open .popup { transform: translateY(0) scale(1); }
 
     .popup-close {
       position: absolute;
-      top: 1rem; right: 1rem;
-      background: var(--bg);
+      top: 1.1rem; right: 1.1rem;
+      background: rgba(255,255,255,0.07);
       border: none;
       width: 32px; height: 32px;
       border-radius: 50%;
       cursor: pointer;
-      color: var(--text-muted);
-      font-size: 1.1rem;
+      color: rgba(255,255,255,0.45);
+      font-size: 0.9rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.2s;
+      transition: background 0.2s, color 0.2s;
     }
 
-    .popup-close:hover { background: var(--border); }
+    .popup-close:hover { background: rgba(255,255,255,0.13); color: #fff; }
+
+    .popup-eyebrow {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
 
     .popup-title {
       font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      color: var(--navy);
-      margin-bottom: 0.4rem;
+      font-size: 1.7rem;
+      color: #fff;
+      margin-bottom: 0.35rem;
+      line-height: 1.2;
     }
 
     .popup-sub {
-      font-size: 0.875rem;
-      color: var(--text-muted);
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.4);
       margin-bottom: 2rem;
+      line-height: 1.6;
     }
 
     .contact-option {
       display: flex;
       align-items: center;
       gap: 1rem;
-      padding: 1rem 1.25rem;
-      border-radius: 10px;
-      border: 1px solid var(--border);
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
       text-decoration: none;
-      color: var(--text);
-      transition: border-color 0.2s, background 0.2s;
-      margin-bottom: 0.75rem;
+      color: #fff;
+      transition: padding-left 0.25s cubic-bezier(0.22,1,0.36,1);
+      position: relative;
     }
 
-    .contact-option:hover {
-      background: var(--bg);
-      border-color: var(--navy-light);
+    .contact-option:last-of-type { border-bottom: none; }
+
+    .contact-option::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--accent);
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform 0.3s cubic-bezier(0.22,1,0.36,1);
     }
+
+    .contact-option:hover { padding-left: 0.75rem; }
+    .contact-option:hover::before { transform: scaleY(1); }
 
     .contact-icon {
-      width: 44px; height: 44px;
+      width: 42px; height: 42px;
       border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
     }
 
-    .icon-email { background: #eef2f9; color: var(--navy); }
-    .icon-wa { background: #e8f8ee; color: #25d366; }
+    .icon-email { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.75); }
+    .icon-wa { background: rgba(37,211,102,0.12); color: #25d366; }
+    .icon-li { background: rgba(10,102,194,0.18); color: #5eaee0; }
 
     .contact-option-label {
-      font-size: 0.75rem;
-      color: var(--text-muted);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
       display: block;
+      margin-bottom: 0.15rem;
     }
 
     .contact-option-value {
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       font-weight: 500;
-      color: var(--navy);
+      color: rgba(255,255,255,0.88);
     }
 
     @keyframes pulse {
@@ -1815,7 +2210,7 @@
             <div class="stat-label">Years in IT & Service Management</div>
           </div>
           <div class="stat-card">
-            <div class="stat-number" style="font-size:2.5rem;line-height:1.2;">🇩🇰 🇧🇪 🇷🇴</div>
+            <div class="stat-number" style="font-size:1.75rem;letter-spacing:0.06em;">DK · BE · RO</div>
             <div class="stat-label">Countries Worked In</div>
           </div>
           <div class="stat-card stat-featured">
@@ -2068,259 +2463,260 @@
     <div class="container">
       <p class="section-label" style="display:none;">Selected Work</p>
       <h2 class="section-title" style="font-family:'Montserrat',sans-serif;color:var(--accent);font-weight:700;">Selected Work</h2>
-      <!-- LEGO connected pair -->
-      <div style="grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1.5px solid var(--navy); border-radius: var(--radius); overflow: hidden;">
 
-        <!-- Part 1 — ivory -->
-        <div class="project-card" style="border: none; border-radius: 0; border-right: 1px solid var(--navy); background: var(--surface);">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem; flex-wrap:wrap; gap:0.4rem;">
-            <div class="project-org" style="margin-bottom:0;">LEGO Group · Aarhus University</div>
-            <span style="font-size:0.68rem;font-weight:600;letter-spacing:0.08em;background:var(--navy);color:#fff;padding:0.18rem 0.6rem;border-radius:20px;">Part 1 of 2</span>
+      <div class="proj-showcase">
+
+        <!-- 01 LEGO Group -->
+        <div class="proj-case">
+          <div class="proj-case-left">
+            <span class="proj-case-num">01</span>
+            <div class="proj-case-org">LEGO Group · Aarhus University</div>
+            <div class="proj-case-domain">Data Governance · Design Science · 30 ECTS</div>
           </div>
-          <div class="project-title">A Case of Disconnected Designs</div>
-          <p style="font-size:0.72rem;font-weight:600;letter-spacing:0.08em;color:var(--accent);text-transform:uppercase;margin-bottom:0.75rem;">Data Audit · Technology Specialisation 2 · Grade 12 / A</p>
-          <p class="project-desc">The LEGO Group's Packaging Department tracked and managed materials across four digital systems, SAP, Impact, CF2, and PDF, that were supposed to be perfectly synchronised. Nobody had formally measured how far reality deviated from that ideal.</p>
-          <p class="project-desc" style="margin-top:0.6rem;">I analysed 40,577 files across all four systems, quantified all cross-system misalignments, and categorised errors by root cause. What I found was that the problem was not technical but organisational: missing governance roles, informal data habits, and no enforced policies.</p>
-          <div class="project-impact" style="margin-top:1rem;">📋 Delivered the Audit → Prevent → Clean → Comply framework as the proposed solution path</div>
-          <div class="project-tags">
-            <span class="tag">Data Analysis</span>
-            <span class="tag">SAP</span>
-            <span class="tag">Excel</span>
-            <span class="tag">Mixed Methods</span>
-            <span class="tag">Root Cause Analysis</span>
-            <span class="tag">Stakeholder Research</span>
-          </div>
-        </div>
-
-        <!-- Connector arrow -->
-        <div style="position:relative;">
-          <div style="position:absolute;left:-18px;top:50%;transform:translateY(-50%);z-index:2;background:var(--accent);color:var(--navy);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,0.15);">→</div>
-
-        <!-- Part 2 — navy -->
-          <div class="project-card" style="border: none; border-radius: 0; height:100%; background: var(--navy);">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem; flex-wrap:wrap; gap:0.4rem;">
-              <div class="project-org" style="margin-bottom:0; color:var(--accent);">LEGO Group · Aarhus University</div>
-              <span style="font-size:0.68rem;font-weight:600;letter-spacing:0.08em;background:var(--accent);color:var(--navy);padding:0.18rem 0.6rem;border-radius:20px;">Part 2 of 2</span>
+          <div class="proj-case-right">
+            <div class="proj-case-metric">Grade 12/12 · Master's Thesis · Top Academic Honor</div>
+            <h3 class="proj-case-title">A Case of Disconnected Designs → Beyond the Audit</h3>
+            <p class="proj-case-desc">Two-part applied research inside the LEGO Group — first auditing cross-system data misalignment across 40,577 packaging files, then designing and operationalising a complete data governance framework with Python automation and 100% anomaly detection in under one minute.</p>
+            <div class="proj-case-tags">
+              <span class="tag">Data Governance</span><span class="tag">Python</span><span class="tag">SAP</span><span class="tag">Design Science</span><span class="tag">KPI Dashboard</span><span class="tag">Root Cause Analysis</span>
             </div>
-            <div class="project-title" style="color:#fff;">Beyond the Audit</div>
-            <p style="font-size:0.72rem;font-weight:600;letter-spacing:0.08em;color:var(--accent);text-transform:uppercase;margin-bottom:0.75rem;">Data Governance Framework · Master's Thesis · Grade 12 / A · 30 ECTS</p>
-            <p class="project-desc" style="color:#faf8f4;">Built on the audit findings to design and operationalise a complete data governance framework, moving from problem diagnosis to solution and strategy design.</p>
-            <p class="project-desc" style="margin-top:0.6rem;color:#faf8f4;">Key deliverables included extended naming conventions, Python automation scripts achieving 100% anomaly detection in under 1 minute, a KPI dashboard for ongoing governance monitoring, and a staff training programme. The active master data scope was reduced from 26,880 records to 8.1%, establishing a clean foundation for the LEGO Group's planned migration to a new design platform.</p>
-            <p class="project-desc" style="margin-top:0.6rem;color:#faf8f4;">The recommended solution introduced a temporary Data Governance Specialist role to bridge the gap between informal practices and a self-sustaining governed environment.</p>
-            <div class="project-impact" style="margin-top:1rem;background:rgba(200,169,110,0.15);border:1px solid rgba(200,169,110,0.3);color:var(--accent);">🎯 100% anomaly detection · &lt;1 min execution · Active scope reduced to 8.1%</div>
-            <div class="project-tags">
-              <span class="tag">Python</span>
-              <span class="tag">Data Governance</span>
-              <span class="tag">SAP</span>
-              <span class="tag">KPI Dashboard</span>
-              <span class="tag">Design Science</span>
-              <span class="tag">Process Design</span>
+            <button class="proj-case-expand" aria-expanded="false">
+              Case study details
+              <svg class="expand-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="proj-case-detail">
+              <div class="proj-case-detail-inner">
+                <div class="proj-split">
+                  <div class="proj-split-card">
+                    <div class="proj-split-label">Part 1 of 2 · Technology Specialisation 2</div>
+                    <div class="proj-split-title">A Case of Disconnected Designs</div>
+                    <div class="proj-impact-callout">Audit — Prevent — Clean — Comply framework · Cross-system misalignment across 40,577 files quantified and categorised by root cause</div>
+                    <p class="proj-detail-desc">The LEGO Group's Packaging Department tracked materials across four systems — SAP, Impact, CF2, and PDF — that were supposed to be perfectly synchronised. Nobody had formally measured how far reality deviated from that ideal. I analysed all four, quantified the misalignments, and categorised errors by root cause. The problem was not technical but organisational: missing governance roles, informal data habits, no enforced policies.</p>
+                    <div class="project-tags" style="margin-top:1rem;">
+                      <span class="tag">Data Analysis</span><span class="tag">SAP</span><span class="tag">Excel</span><span class="tag">Mixed Methods</span><span class="tag">Root Cause Analysis</span>
+                    </div>
+                  </div>
+                  <div class="proj-split-card is-dark">
+                    <div class="proj-split-label">Part 2 of 2 · Master's Thesis · 30 ECTS</div>
+                    <div class="proj-split-title on-dark">Beyond the Audit</div>
+                    <div class="proj-impact-callout">100% anomaly detection in under 1 minute · Active master data scope reduced from 26,880 records to 8.1%</div>
+                    <p class="proj-detail-desc on-dark">Built on the audit findings to design and operationalise a complete governance framework — from problem diagnosis to solution and strategy. Key deliverables: extended naming conventions, Python automation, a KPI dashboard, and a staff training programme. Introduced a temporary Data Governance Specialist role to bridge the gap between informal practices and a self-sustaining governed environment.</p>
+                    <div class="project-tags" style="margin-top:1rem;">
+                      <span class="tl-tag">Python</span><span class="tl-tag">Data Governance</span><span class="tl-tag">SAP</span><span class="tl-tag">KPI Dashboard</span><span class="tl-tag">Design Science</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="projects-grid" style="margin-top:1.5rem;">
-
-        <div class="project-card">
-          <div class="project-org">EU DIOL Programme (Interreg North Sea) · Port of Esbjerg</div>
-          <div class="project-title">Drone Integration in Port Operations</div>
-          <p style="font-size:0.72rem;font-weight:600;letter-spacing:0.08em;color:var(--accent);text-transform:uppercase;margin-bottom:0.75rem;">Technological Business Model Innovation</p>
-          <p class="project-desc">Assessed drone integration for Europe's leading offshore wind port. Modelled As-Is and To-Be states using BMC and Cambridge BMIP, defined 6 use cases across 4 drone types, and designed a full-lease low-CAPEX strategy with an Infrastructure-as-a-Service revenue model for external operators.</p>
-          <div class="project-impact">💰 €56,600 annual savings · Break-even Year 2.7 · Positive ROI by Year 3</div>
-          <div class="project-tags">
-            <span class="tag">BMC</span>
-            <span class="tag">Cambridge BMIP</span>
-            <span class="tag">Financial Modelling</span>
-            <span class="tag">ROI Analysis</span>
-            <span class="tag">ESG</span>
-            <span class="tag">EU DIOL</span>
+        <!-- 02 Port of Esbjerg -->
+        <div class="proj-case">
+          <div class="proj-case-left">
+            <span class="proj-case-num">02</span>
+            <div class="proj-case-org">Port of Esbjerg · EU DIOL Programme</div>
+            <div class="proj-case-domain">Business Model Innovation · ESG · Interreg North Sea</div>
+          </div>
+          <div class="proj-case-right">
+            <div class="proj-case-metric">€56,600 annual savings · Break-even Year 2.7 · Positive ROI Year 3</div>
+            <h3 class="proj-case-title">Drone Integration in Port Operations</h3>
+            <p class="proj-case-desc">Business model assessment for drone integration at Europe's leading offshore wind port — modelling As-Is and To-Be states, defining 6 use cases across 4 drone types, and designing a low-CAPEX full-lease strategy with an Infrastructure-as-a-Service revenue model for external operators.</p>
+            <div class="proj-case-tags">
+              <span class="tag">BMC</span><span class="tag">Cambridge BMIP</span><span class="tag">Financial Modelling</span><span class="tag">ROI Analysis</span><span class="tag">ESG</span>
+            </div>
+            <button class="proj-case-expand" aria-expanded="false">
+              Case study details
+              <svg class="expand-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="proj-case-detail">
+              <div class="proj-case-detail-inner">
+                <p class="proj-detail-type">Technological Business Model Innovation</p>
+                <div class="proj-impact-callout">€56,600 annual savings · Break-even Year 2.7 · Positive ROI by Year 3</div>
+                <p class="proj-detail-desc">Assessed drone integration for Europe's leading offshore wind port as part of the EU DIOL Programme (Interreg North Sea). Modelled As-Is and To-Be business states using BMC and Cambridge BMIP, defined 6 operational use cases across 4 drone types (inspection, security, logistics, surveying), and designed a full-lease low-CAPEX strategy that avoids ownership risk while enabling an Infrastructure-as-a-Service revenue stream for external operators.</p>
+                <div class="project-tags" style="margin-top:1rem;">
+                  <span class="tag">BMC</span><span class="tag">Cambridge BMIP</span><span class="tag">Financial Modelling</span><span class="tag">ROI Analysis</span><span class="tag">ESG</span><span class="tag">EU DIOL</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="project-card">
-          <div class="project-org">Maersk · Aarhus University · Technology Specialisation 1</div>
-          <div class="project-title">Optimizing IT Incident Management</div>
-          <p style="font-size:0.72rem;font-weight:600;letter-spacing:0.08em;color:var(--accent);text-transform:uppercase;margin-bottom:0.75rem;">AI vs Manual Analysis · Real Enterprise Dataset</p>
-          <p class="project-desc">Processed 3,950 live ServiceNow incident tickets from Maersk through both manual review and AI (Copilot Pro), a like-for-like evaluation that identified a 59.87% AI error rate in CI classification. Proposed a hybrid AI-human framework with Power Automate integration, projecting AI accuracy growth from 26% to 50% over 12 months while halving manual processing costs.</p>
-          <div class="project-impact">⚡ 92% cost reduction · 65,835 DKK → 5,138 DKK · 3,950 live tickets analysed</div>
-          <div class="project-tags">
-            <span class="tag">AI / Copilot Pro</span>
-            <span class="tag">ServiceNow</span>
-            <span class="tag">Power Automate</span>
-            <span class="tag">ITIL</span>
-            <span class="tag">Data Analysis</span>
-            <span class="tag">Mixed Methods</span>
+        <!-- 03 Maersk -->
+        <div class="proj-case">
+          <div class="proj-case-left">
+            <span class="proj-case-num">03</span>
+            <div class="proj-case-org">Maersk · Aarhus University</div>
+            <div class="proj-case-domain">IT Operations · AI Evaluation · Real Enterprise Dataset</div>
+          </div>
+          <div class="proj-case-right">
+            <div class="proj-case-metric">92% cost reduction · DKK 65,835 → DKK 5,138 · 3,950 live tickets</div>
+            <h3 class="proj-case-title">Optimising IT Incident Management at Scale</h3>
+            <p class="proj-case-desc">Like-for-like evaluation of AI versus manual processing on 3,950 live ServiceNow tickets from Maersk — identifying a 59.87% AI error rate in CI classification, then designing a hybrid AI-human framework projected to grow AI accuracy from 26% to 50% within 12 months while cutting classification costs by 92%.</p>
+            <div class="proj-case-tags">
+              <span class="tag">AI / Copilot Pro</span><span class="tag">ServiceNow</span><span class="tag">Power Automate</span><span class="tag">ITIL</span><span class="tag">Data Analysis</span>
+            </div>
+            <button class="proj-case-expand" aria-expanded="false">
+              Case study details
+              <svg class="expand-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="proj-case-detail">
+              <div class="proj-case-detail-inner">
+                <p class="proj-detail-type">AI vs Manual Analysis · Technology Specialisation 1</p>
+                <div class="proj-impact-callout">92% cost reduction · DKK 65,835 reduced to DKK 5,138 · 3,950 live tickets analysed</div>
+                <p class="proj-detail-desc">Processed 3,950 live ServiceNow incident tickets from Maersk through both manual review and AI (Microsoft Copilot Pro) — a structured like-for-like evaluation that identified a 59.87% AI error rate in Configuration Item classification. The study went beyond measurement: it proposed a phased hybrid AI-human framework with Power Automate integration, projecting AI accuracy growth from 26% to 50% over 12 months while halving the cost of manual processing.</p>
+                <div class="project-tags" style="margin-top:1rem;">
+                  <span class="tag">AI / Copilot Pro</span><span class="tag">ServiceNow</span><span class="tag">Power Automate</span><span class="tag">ITIL</span><span class="tag">Data Analysis</span><span class="tag">Mixed Methods</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="project-card">
-          <div class="project-org">Aarhus University · Python Fundamentals for Machine Learning</div>
-          <div class="project-title">Predicting Used Car Prices with Machine Learning</div>
-          <p style="font-size:0.72rem;font-weight:600;letter-spacing:0.08em;color:var(--accent);text-transform:uppercase;margin-bottom:0.75rem;">Regression Modelling · End-to-End Pipeline</p>
-          <p class="project-desc">Built and compared four regression models to predict used car prices from nearly 100,000 UK listings. Covered the full data science pipeline from cleaning and feature engineering through to model evaluation and a working GUI prototype. XGBoost outperformed all others with an R² of 0.967, while a stacked ensemble confirmed its dominance rather than improving on it.</p>
-          <div class="project-impact">📈 R² 0.967 · Mean error £1,117 · 97,712 records · XGBoost + Random Forest + Stacking</div>
-          <div class="project-tags">
-            <span class="tag">Python</span>
-            <span class="tag">XGBoost</span>
-            <span class="tag">Random Forest</span>
-            <span class="tag">scikit-learn</span>
-            <span class="tag">Feature Engineering</span>
-            <span class="tag">Data Visualisation</span>
+      </div><!-- /.proj-showcase -->
+
+      <!-- Supporting projects -->
+      <div class="proj-grid-heading">More Projects</div>
+      <div class="proj-support-grid">
+
+        <!-- 04 Barber's House -->
+        <div class="proj-support-card">
+          <div class="proj-support-num">04 · VIA University College</div>
+          <div class="proj-support-org">Bachelor's Thesis · Real Client · Production Deployment</div>
+          <div class="proj-support-title">Barber's House — Full-Stack Web Application</div>
+          <div class="proj-support-metric">Live in production · 5 CI/CD pipelines · 23 Selenium tests passing</div>
+          <div class="proj-support-tags">
+            <span class="tag">React</span><span class="tag">.NET Core</span><span class="tag">PostgreSQL</span><span class="tag">SignalR</span><span class="tag">JWT Auth</span>
           </div>
         </div>
 
-        <div class="project-card">
-          <div class="project-org">Aarhus University · Engineering Project Management</div>
-          <div class="project-title">Challenges of Agile Transformation</div>
-          <p style="font-size:0.72rem;font-weight:600;letter-spacing:0.08em;color:var(--accent);text-transform:uppercase;margin-bottom:0.75rem;">Organisational Change · Case Study Research</p>
-          <p class="project-desc">Investigated why Agile transformations so often fall short, using case studies from the LEGO Group, Nordea, and a multinational financial firm. Most failures traced back to cultural and leadership gaps, not methodology. The central argument: if hybrid is where most transformations land anyway, should it be the intentional starting point rather than an accidental outcome?</p>
-          <div class="project-impact">📊 3 real-world case studies · LEGO Group, Nordea, and a multinational financial firm</div>
-          <div class="project-tags">
-            <span class="tag">Agile</span>
-            <span class="tag">Change Management</span>
-            <span class="tag">Scrum</span>
-            <span class="tag">Case Study</span>
-            <span class="tag">Kotter's 8-Step</span>
-            <span class="tag">Organisational Design</span>
+        <!-- 05 ML Cars -->
+        <div class="proj-support-card">
+          <div class="proj-support-num">05 · Aarhus University</div>
+          <div class="proj-support-org">Python for Machine Learning · Regression Modelling</div>
+          <div class="proj-support-title">Used Car Price Prediction with Machine Learning</div>
+          <div class="proj-support-metric">R² 0.967 · Mean error £1,117 · 97,712 records · XGBoost</div>
+          <div class="proj-support-tags">
+            <span class="tag">Python</span><span class="tag">XGBoost</span><span class="tag">scikit-learn</span><span class="tag">Feature Engineering</span>
           </div>
         </div>
 
-        <div class="project-card">
-          <div class="project-org">Aarhus University · Six Sigma Design & Innovation</div>
-          <div class="project-title">International Graduate Retention in Denmark</div>
-          <p style="font-size:0.72rem;font-weight:600;letter-spacing:0.08em;color:var(--accent);text-transform:uppercase;margin-bottom:0.75rem;">Six Sigma DMAIC · Policy & Labour Market</p>
-          <p class="project-desc">Applied the Six Sigma DMAIC framework to one of Denmark's real talent challenges: roughly 50% of international graduates leave within three years of finishing their studies. Working in a team of four, we combined a primary survey of 63 students with 10 years of Statistics Denmark data to diagnose root causes and propose evidence-based interventions across employment access, language integration, and policy.</p>
-          <div class="project-impact">🎯 SMART goal: improve international graduate retention rate by 10% within 3 years</div>
-          <div class="project-tags">
-            <span class="tag">Six Sigma</span>
-            <span class="tag">DMAIC</span>
-            <span class="tag">FMEA</span>
-            <span class="tag">Pugh Matrix</span>
-            <span class="tag">Chi-Square</span>
-            <span class="tag">Pareto Analysis</span>
-            <span class="tag">Mixed Methods</span>
+        <!-- 06 Agile -->
+        <div class="proj-support-card">
+          <div class="proj-support-num">06 · Aarhus University</div>
+          <div class="proj-support-org">Engineering Project Management · Case Study Research</div>
+          <div class="proj-support-title">Challenges of Agile Transformation</div>
+          <div class="proj-support-metric">LEGO Group, Nordea, and a multinational financial firm</div>
+          <div class="proj-support-tags">
+            <span class="tag">Agile</span><span class="tag">Change Management</span><span class="tag">Kotter's 8-Step</span>
           </div>
         </div>
 
-        <div class="project-card">
-          <div class="project-org">VIA University College · Bachelor's Thesis</div>
-          <div class="project-title">Barber's House — Full-Stack Web Application</div>
-          <p style="font-size:0.72rem;font-weight:600;letter-spacing:0.08em;color:var(--accent);text-transform:uppercase;margin-bottom:0.75rem;">Real Client · Production Deployment</p>
-          <p class="project-desc">Digitally transformed a real barbershop in Horsens, replacing a phone-and-paper booking system with a full-stack web platform. Delivered a customer-facing booking wizard and a secure admin dashboard, built with React, .NET Core, PostgreSQL, and SignalR for real-time slot availability. Shipped with JWT auth, 5 CI/CD pipelines via GitHub Actions, and 23 automated Selenium test cases, all passing.</p>
-          <div class="project-impact">🚀 Live in production · Real client feedback · Danish & English · Firebase + Google Cloud</div>
-          <div class="project-tags">
-            <span class="tag">React</span>
-            <span class="tag">.NET Core</span>
-            <span class="tag">PostgreSQL</span>
-            <span class="tag">SignalR</span>
-            <span class="tag">CI/CD</span>
-            <span class="tag">Selenium</span>
-            <span class="tag">JWT Auth</span>
+        <!-- 07 Six Sigma -->
+        <div class="proj-support-card">
+          <div class="proj-support-num">07 · Aarhus University</div>
+          <div class="proj-support-org">Six Sigma Design &amp; Innovation · Policy Research</div>
+          <div class="proj-support-title">International Graduate Retention in Denmark</div>
+          <div class="proj-support-metric">+10% retention target · 63 surveyed · 10yr Statistics Denmark dataset</div>
+          <div class="proj-support-tags">
+            <span class="tag">Six Sigma</span><span class="tag">DMAIC</span><span class="tag">FMEA</span><span class="tag">Pareto Analysis</span>
           </div>
         </div>
 
-      </div><!-- end inner projects-grid -->
+      </div><!-- /.proj-support-grid -->
     </div>
   </section>
   <section id="skills">
     <div class="container">
       <p class="section-label" style="display:none;">What I Bring</p>
       <h2 class="section-title" style="font-family:'Montserrat',sans-serif;color:var(--accent);font-weight:700;">What I Bring</h2>
-      <div class="skills-grid">
 
-        <div class="skill-group">
-          <div class="skill-group-title">Service Management & Operations</div>
-          <div class="skill-tags">
-            <span class="skill-tag">ITIL</span>
-            <span class="skill-tag">Incident Management</span>
-            <span class="skill-tag">Change Management</span>
-            <span class="skill-tag">ServiceNow</span>
-            <span class="skill-tag">SLA Governance</span>
-            <span class="skill-tag">IT Asset Management</span>
-          </div>
+      <div class="traits-grid">
+
+        <div class="trait-card">
+          <span class="trait-num">01</span>
+          <h3 class="trait-headline">Engineering meets business fluency</h3>
+          <p class="trait-body">Most professionals go deep in one direction — technical or commercial. My education was built around the space between them, and every role I have held has required working fluently in both. I can read a technical architecture and a business case, and I know which one is actually driving the decision.</p>
         </div>
 
-        <div class="skill-group">
-          <div class="skill-group-title">Analysis & Governance</div>
-          <div class="skill-tags">
-            <span class="skill-tag">Data Governance</span>
-            <span class="skill-tag">Root Cause Analysis</span>
-            <span class="skill-tag">Six Sigma / DMAIC</span>
-            <span class="skill-tag">KPI Design</span>
-            <span class="skill-tag">Power BI</span>
-            <span class="skill-tag">Python</span>
-            <span class="skill-tag">SQL</span>
-            <span class="skill-tag">ROI Analysis</span>
-            <span class="skill-tag">Quantitative Methods</span>
-          </div>
+        <div class="trait-card">
+          <span class="trait-num">02</span>
+          <h3 class="trait-headline">I make ambiguous problems legible</h3>
+          <p class="trait-body">Messy data, unclear processes, undefined problems — I find the structure inside them. I do not propose solutions until I have quantified what is broken, and I use structured methods to make sure the diagnosis holds up before recommending what to fix.</p>
         </div>
 
-        <div class="skill-group">
-          <div class="skill-group-title">Strategy & Transformation</div>
-          <div class="skill-tags">
-            <span class="skill-tag">Agile / Scrum</span>
-            <span class="skill-tag">Business Model Canvas</span>
-            <span class="skill-tag">Cambridge BMIP</span>
-            <span class="skill-tag">Process Improvement</span>
-            <span class="skill-tag">Stakeholder Management</span>
-            <span class="skill-tag">Qualitative Methods</span>
-          </div>
-        </div>
-
-        <div class="skill-group">
-          <div class="skill-group-title">Engineering & Development</div>
-          <div class="skill-tags">
-            <span class="skill-tag">SAP</span>
-            <span class="skill-tag">Azure</span>
-            <span class="skill-tag">VMware</span>
-            <span class="skill-tag">.NET / C#</span>
-            <span class="skill-tag">React</span>
-            <span class="skill-tag">Git / CI/CD</span>
-            <span class="skill-tag">Design Science</span>
-          </div>
-        </div>
-
-        <div class="skill-group" style="grid-column: 1 / -1;">
-          <div class="skill-group-title">Languages</div>
-          <div class="skill-tags">
-            <span class="skill-tag">Romanian — Native</span>
-            <span class="skill-tag">English — Fluent</span>
-            <span class="skill-tag">French — Intermediate</span>
-            <span class="skill-tag">Danish — Beginner</span>
-          </div>
+        <div class="trait-card">
+          <span class="trait-num">03</span>
+          <h3 class="trait-headline">I own work from start to finish</h3>
+          <p class="trait-body">I do not hand off halfway through. Whether it is a hardware rollout, a governance framework, or software shipped to a live client, I take work from problem definition to working solution. I finished a two-year Master's degree in sixteen months. That is how I approach things.</p>
         </div>
 
       </div>
+
+      <div class="tools-row">
+        <span class="tools-label">Tools &amp; Frameworks</span>
+        <div class="tools-list">
+          <span class="tag">ServiceNow</span>
+          <span class="tag">ITIL</span>
+          <span class="tag">Python</span>
+          <span class="tag">Six Sigma / DMAIC</span>
+          <span class="tag">Azure</span>
+          <span class="tag">Power BI</span>
+          <span class="tag">SQL</span>
+          <span class="tag">SAP</span>
+          <span class="tag">React</span>
+          <span class="tag">.NET / C#</span>
+          <span class="tag">PostgreSQL</span>
+          <span class="tag">VMware</span>
+          <span class="tag">Git / CI/CD</span>
+        </div>
+      </div>
+
+      <div class="languages-strip">
+        <div class="language-item">
+          <span class="language-name">Romanian</span>
+          <span class="language-level">Native</span>
+        </div>
+        <div class="language-item">
+          <span class="language-name">English</span>
+          <span class="language-level">Fluent</span>
+        </div>
+        <div class="language-item">
+          <span class="language-name">French</span>
+          <span class="language-level">Intermediate</span>
+        </div>
+        <div class="language-item">
+          <span class="language-name">Danish</span>
+          <span class="language-level">Beginner</span>
+        </div>
+      </div>
+
     </div>
   </section>
 
   <!-- FOOTER -->
   <footer>
-    <div class="footer-name">Felix Stan</div>
-    <div class="footer-tagline">Engineer by training · Business thinker by choice · Problem solver by habit</div>
-    <div class="footer-contacts">
-      <a href="mailto:stan.felixioan@gmail.com" class="footer-contact-btn">
-        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-        stan.felixioan@gmail.com
-      </a>
-      <a href="https://wa.me/4591802015" target="_blank" class="footer-contact-btn">
-        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        +45 91 80 20 15
-      </a>
-      <a href="https://www.linkedin.com/in/felix-stan-04300b175/" target="_blank" class="footer-contact-btn">
-        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-        LinkedIn
-      </a>
+    <div class="footer-inner">
+      <div class="footer-left">
+        <div class="footer-avail">
+          <span class="footer-avail-dot"></span>
+          <span class="footer-avail-text">Available &mdash; Based in Denmark, open across Europe</span>
+        </div>
+        <div class="footer-wordmark">Felix Stan</div>
+      </div>
+      <div class="footer-icons">
+        <a href="mailto:stan.felixioan@gmail.com" class="footer-icon-link" aria-label="Email">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/felix-stan-04300b175/" target="_blank" class="footer-icon-link" aria-label="LinkedIn">
+          <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+        </a>
+        <a href="https://github.com/felixioan" target="_blank" class="footer-icon-link" aria-label="GitHub">
+          <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+      </div>
     </div>
-    <div class="footer-divider"></div>
-    <div class="footer-links">
-      <a href="https://github.com/felixioan" target="_blank">
-        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-        GitHub
-      </a>
-    </div>
-    <div class="footer-copy">© 2026 Felix Stan · Horsens, Denmark</div>
+    <div class="footer-copy">© 2026 Felix Stan</div>
   </footer>
 
   <!-- FLOATING BUTTON -->
@@ -2333,42 +2729,37 @@
   <!-- CONTACT POPUP -->
   <div class="popup-overlay" id="popupOverlay">
     <div class="popup">
-      <button class="popup-close" id="popupClose">✕</button>
-      <div class="popup-title">Get In Touch</div>
-      <p class="popup-sub">Happy to connect — reach out via email, WhatsApp, or LinkedIn.</p>
+      <button class="popup-close" id="popupClose">&#x2715;</button>
+      <div class="popup-eyebrow">Contact</div>
+      <div class="popup-title">Let's connect</div>
+      <p class="popup-sub">Pick whatever channel works for you.</p>
 
       <a href="mailto:stan.felixioan@gmail.com" class="contact-option">
         <div class="contact-icon icon-email">
-          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-          </svg>
+          <svg width="19" height="19" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
         </div>
         <div>
-          <span class="contact-option-label">Send an email</span>
+          <span class="contact-option-label">Email</span>
           <span class="contact-option-value">stan.felixioan@gmail.com</span>
         </div>
       </a>
 
       <a href="https://wa.me/4591802015" target="_blank" class="contact-option">
         <div class="contact-icon icon-wa">
-          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-          </svg>
+          <svg width="19" height="19" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         </div>
         <div>
-          <span class="contact-option-label">Message on WhatsApp</span>
+          <span class="contact-option-label">WhatsApp</span>
           <span class="contact-option-value">+45 91 80 20 15</span>
         </div>
       </a>
 
       <a href="https://www.linkedin.com/in/felix-stan-04300b175/" target="_blank" class="contact-option">
-        <div class="contact-icon" style="background:#e8f0fb;color:#0a66c2;">
-          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-          </svg>
+        <div class="contact-icon icon-li">
+          <svg width="19" height="19" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
         </div>
         <div>
-          <span class="contact-option-label">Connect on LinkedIn</span>
+          <span class="contact-option-label">LinkedIn</span>
           <span class="contact-option-value">Felix Stan</span>
         </div>
       </a>
@@ -2428,7 +2819,7 @@
     // ── Scroll animations — A + C ──────────────────────
 
     // Section-level scale + fade (Option A)
-    const sectionEls = document.querySelectorAll('.tl-card, .exp-item, .stat-card, .skill-group');
+    const sectionEls = document.querySelectorAll('.tl-card, .exp-item, .stat-card, .trait-card');
     sectionEls.forEach(el => {
       el.style.opacity = '0';
       el.style.transform = 'scale(0.96) translateY(24px)';
@@ -2456,6 +2847,43 @@
     document.querySelectorAll('.about-stats .stat-card').forEach((card, i) => {
       card.dataset.staggerIdx = i;
       card.style.transition = `opacity 0.55s cubic-bezier(0.22,1,0.36,1) ${i * 0.15}s, transform 0.55s cubic-bezier(0.22,1,0.36,1) ${i * 0.15}s`;
+    });
+
+    // Stagger trait cards
+    document.querySelectorAll('.trait-card').forEach((card, i) => {
+      card.style.transition = `opacity 0.6s cubic-bezier(0.22,1,0.36,1) ${i * 0.14}s, transform 0.6s cubic-bezier(0.22,1,0.36,1) ${i * 0.14}s`;
+    });
+
+    // Support cards stagger
+    const supportObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+          supportObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.proj-support-card').forEach((card, i) => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(20px)';
+      card.style.transition = `opacity 0.55s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s, transform 0.55s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s`;
+      supportObs.observe(card);
+    });
+
+    // Proj case rows fade in
+    document.querySelectorAll('.proj-case').forEach((row, i) => {
+      row.style.opacity = '0';
+      row.style.transform = 'translateY(18px)';
+      row.style.transition = `opacity 0.6s cubic-bezier(0.22,1,0.36,1) ${i * 0.12}s, transform 0.6s cubic-bezier(0.22,1,0.36,1) ${i * 0.12}s`;
+      new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }
+        });
+      }, { threshold: 0.08 }).observe(row);
     });
 
     // Staggered card reveal (Option C)
@@ -2858,6 +3286,81 @@
         requestAnimationFrame(loopAbout);
       })();
     }
+
+    // ── Project card 3D tilt ──────────────────────────
+    document.querySelectorAll('.project-card').forEach(card => {
+      card.style.willChange = 'transform';
+      card.addEventListener('mousemove', (e) => {
+        const r  = card.getBoundingClientRect();
+        const dx = (e.clientX - (r.left + r.width  / 2)) / (r.width  / 2);
+        const dy = (e.clientY - (r.top  + r.height / 2)) / (r.height / 2);
+        card.style.transform = `perspective(1000px) rotateX(${(-dy * 4).toFixed(2)}deg) rotateY(${(dx * 4).toFixed(2)}deg) translateY(-5px)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)';
+        setTimeout(() => { card.style.transform = ''; }, 350);
+      });
+    });
+
+    // ── Skills: staggered tag entrance ───────────────
+    document.querySelectorAll('.skill-tags').forEach(container => {
+      const tags = Array.from(container.querySelectorAll('.skill-tag'));
+      tags.forEach(tag => {
+        tag.style.opacity = '0';
+        tag.style.transform = 'scale(0.82) translateY(8px)';
+        tag.style.transition = 'opacity 0.3s ease, transform 0.3s cubic-bezier(0.22,1,0.36,1)';
+      });
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          tags.forEach((tag, i) => setTimeout(() => {
+            tag.style.opacity = '1';
+            tag.style.transform = 'scale(1) translateY(0)';
+          }, i * 55));
+          obs.unobserve(entry.target);
+        });
+      }, { threshold: 0.15 });
+      obs.observe(container);
+    });
+
+    // ── Skills: accent line draw + is-visible class ───
+    document.querySelectorAll('.skill-group').forEach(group => {
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
+        });
+      }, { threshold: 0.2 });
+      obs.observe(group);
+    });
+
+    // ── Projects accordion ────────────────────────────
+    document.querySelectorAll('.proj-case-expand').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item   = btn.closest('.proj-case');
+        const detail = item.querySelector('.proj-case-detail');
+        const isOpen = item.classList.contains('is-open');
+
+        document.querySelectorAll('.proj-case.is-open').forEach(open => {
+          if (open === item) return;
+          open.querySelector('.proj-case-detail').style.maxHeight = '0';
+          open.classList.remove('is-open');
+          open.querySelector('.proj-case-expand').setAttribute('aria-expanded', 'false');
+        });
+
+        if (!isOpen) {
+          item.classList.add('is-open');
+          detail.style.maxHeight = detail.scrollHeight + 'px';
+          btn.setAttribute('aria-expanded', 'true');
+          setTimeout(() => item.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 80);
+        } else {
+          detail.style.maxHeight = '0';
+          item.classList.remove('is-open');
+          btn.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
 
     // ── Magnetic CTA button ────────────────────────────
     const ctaBtn = document.querySelector('.hero-cta');
